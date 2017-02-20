@@ -1,0 +1,15 @@
+{
+    "name": "drkthunder02/phptimerboard",
+    "description": "Timerboard for Eve Online written in PHP",
+    "authors": [
+        {
+            "name": "drkthunder02",
+            "email": "mancuso.christopher@gmail.com"
+        }
+    ],
+    "require": {
+        "PHP": ">=7.0",
+        "simplon/mysql": "1.3.4",
+        "twbs/bootstrap": "4.0.0-alpha.6"
+    }
+}
