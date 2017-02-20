@@ -14,7 +14,7 @@ function PrintHTMLIndexHeader() {
                 <meta content=\"EVEOTS V2 Admin Panel\" name=\"description\">
                 <meta content=\"index,follow\" name=\"robots\">
                 <meta content=\"width=device-width, initial-scale=1\" name=\"viewport\">
-                <title>EVEOTS V2 Admin Panel</title>
+                <title>PHP Timer Board</title>
                 <link href=\"/../css/bootstrap.min.css\" rel=\"stylesheet\" type=\"text/css\">
                 <link rel=\"shortcut icon\" href=\"/../images/banner.jpg\" type=\"image/x-icon\">
                 <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>
@@ -23,6 +23,6 @@ function PrintHTMLIndexHeader() {
     printf("<body>");
     printf("<div class=\"container\">");
     printf("<div class=\"header clearfix\">");
-    printf("<h3 class=\"text-muted\">EVEOTS V2 SSO Login</h3>");
+    printf("<h3 class=\"text-muted\">PHP Timerboard Login</h3>");
     printf("</div>");
 }
