@@ -88,7 +88,7 @@ switch($_REQUEST['action']) {
         $data = json_decode($result);
         //With the access token and refresh token make the cURL call to get the characterID
         $url = 'https://login.eveonline.com/oauth/verify';
-        $header='Authorization: Bearer ' . $accessToken; 
+        $header='Authorization: Bearer ' . $data->accessToken; 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
