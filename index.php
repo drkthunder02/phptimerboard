@@ -18,8 +18,8 @@ require_once __DIR__.'/functions/registry.php';
 
 //Start a session
 $session = new \Custom\Sessions\session();
-$clientid = NULL;
-$secretkey = NULL;
+$clientid = '4d87d41740c24eac96f8b9e4b77ceb35';
+$secretkey = 'xNe3zYNHrQszmy5GfVk6AKbzUbwVFDgicd7zqrF7';
 
 //If the state is not set then set it to NULL
 if(!isset($_SESSION['state'])) {
@@ -34,14 +34,14 @@ switch($_REQUEST['action']) {
         //https://login.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=https%3A%2F%2F3rdpartysite.com%2Fcallback&client_id=3rdpartyClientId&scope=characterContactsRead%20characterContactsWrite&state=uniquestate123
         printf("<div class=\"container\">");
         printf("<div class=\"jumbotron\">");
-        printf("<p><h1>EVEOTS V2 Authentication</h1></p>");
+        printf("<p><h1>PHP Timerboard for EVE Online</h1></p>");
         printf("<br>");
-        printf("<p><h3>Click on the button below to register for the EVEOTS.  This will bring you to through the eve online single sign on process in order to get registered for this Teamspeak3 server.</h3></p>");
+        printf("<p><h3>Please login via EVE Online SSO to be verified for access.</h3></p>");
         printf("<br>");
         printf("<p align=\"center\">");
         printf("<a href=\"https://login.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=" . 
                 urldecode(GetSSOCallbackURL()) . "&client_id=" . 
-                $clientid . "&scope=publicData" . "&state=" . $_SESSION['state'] . "\">");
+                $clientid . "&state=" . $_SESSION['state'] . "\">");
         printf("<img src=\"images/EVE_SSO_Login_Buttons_Large_Black.png\">");
         printf("</a>");
         printf("</p>");
@@ -85,10 +85,11 @@ switch($_REQUEST['action']) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         $result = curl_exec($ch);
         //Get the resultant data from the curl call
-        $data = json_decode($result);
+        $data = json_decode($result, true);
+        var_dump($data);
         //With the access token and refresh token make the cURL call to get the characterID
         $url = 'https://login.eveonline.com/oauth/verify';
-        $header='Authorization: Bearer ' . $data->accessToken; 
+        $header='Authorization: Bearer ' . $data['access_token']; 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);

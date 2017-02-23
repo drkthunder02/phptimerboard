@@ -29,8 +29,8 @@ function SSOSuccess($char, $corp, $charID) {
     
     //Access Levels:
     //0 - Not Allowed at all
-    //1 - Read
-    //2 - Read & Write Timers
+    //1 - Read & Write Timers
+    //2 - Read, Write, & Edit Timers
     //3 - Read & Write Timers, Administrator
     //Corporations should not have access level above 1
     //Characters can have higher than 1 access level.
@@ -58,9 +58,11 @@ function SSOSuccess($char, $corp, $charID) {
     DBClose($db);
     
     print("Logging into site now.<br>");
+    sleep(3);
     //Go to the main site for timers in the timerboard
     $location = 'http://' . $_SERVER['HTTP_HOST'];
-    $location = $location . dirname($_SERVER['PHP_SELF']) . '/../../timerboard/index.php';
+    $location = $location . dirname($_SERVER['PHP_SELF']) . '/timer/index.php';
+    var_dump($location);
     header("Location: $location");
 }
 
