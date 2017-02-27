@@ -25,6 +25,7 @@ PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 //Print the form to add an alliance to the whitelist
 //Add timer form
 printf("<div class=\"container\">
+            <h3>Enter either the alliance name or alliance id of the alliance to add to the ability to login.</h3><br>
             <form class=\"form-group\" action=\"/../process/addalliance.php\" method=\"POST\">
                 <div class=\"form-group\">
                     <label for=\"AllianceName\">Alliance Name:</label>

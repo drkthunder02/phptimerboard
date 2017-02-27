@@ -86,3 +86,25 @@ CREATE TABLE IF NOT EXISTS `Alliances` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for `AllianceNames`
+--
+
+CREATE TABLE IF NOT EXISTS `AllianceNames` (
+    `AllianceID` varchar(12),
+    `Name` varchar(100),
+    PRIMARY KEY (`AllianceID`),
+    UNIQUE KEY `AllianceID` (`AllianceID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for `CorporationNames`
+--
+
+CREATE TABLE IF NOT EXISTS `CorporationNames` (
+    `CorporationID` varchar(12),
+    `Name` varchar(100),
+    PRIMARY KEY (`CorporationID`),
+    UNIQUE KEY `CorporationID` (`CorporationID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

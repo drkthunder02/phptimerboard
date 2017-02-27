@@ -3,17 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/timerboard/functions/html/printnavbarlogged.php</file>
-            <file>file:/var/www/timerboard/timer/removecorp.php</file>
-            <file>file:/var/www/timerboard/timer/remove.php</file>
-            <file>file:/var/www/timerboard/timer/removealliance.php</file>
-            <file>file:/var/www/timerboard/timer/edit.php</file>
-            <file>file:/var/www/timerboard/timer/logout.php</file>
-            <file>file:/var/www/timerboard/timer/addcorporation.php</file>
+            <file>file:/var/www/timerboard/functions/process/addalliance.php</file>
+            <file>file:/var/www/timerboard/functions/process/addtimer.php</file>
+            <file>file:/var/www/timerboard/functions/process/modifycharacter.php</file>
             <file>file:/var/www/timerboard/timer/addalliance.php</file>
-            <file>file:/var/www/timerboard/timer/modifycharacter.php</file>
-            <file>file:/var/www/timerboard/timer/index.php</file>
+            <file>file:/var/www/timerboard/functions/process/removecharacter.php</file>
+            <file>file:/var/www/timerboard/functions/process/addcorporation.php</file>
+            <file>file:/var/www/timerboard/functions/process/edittimer.php</file>
+            <file>file:/var/www/timerboard/functions/process/removecorporation.php</file>
             <file>file:/var/www/timerboard/timer/add.php</file>
+            <file>file:/var/www/timerboard/functions/process/removealliance.php</file>
         </group>
     </open-files>
 </project-private>
