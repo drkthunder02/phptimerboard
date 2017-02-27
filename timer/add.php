@@ -24,9 +24,9 @@ PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 //Add timer form
 printf("<div class=\"container\">
             <form class=\"form-group\" action=\"/../process/addtimer.php\" method=\"POST\">
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" value=\"Offensive\">Offensive</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" value=\"Defensive\">Defense</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" value=\"Fuel\">Fuel</label>
+                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Offensive\">Offensive</label>
+                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Defensive\">Defense</label>
+                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Fuel\">Fuel</label>
                 <div class=\"form-group\">
                     <label for=\"Stage\">Stage:</label>
                     <input class=\"form-control\" type=\"text\" name=\"Stage\" id=\"Stage\">

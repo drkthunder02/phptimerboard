@@ -18,3 +18,84 @@ if($_SESSION['logged'] != true) {
     die();
 }
 
+if(isset($_POST['Type'])) {
+    $type = filter_input(POST, 'Type');
+} else {
+    $type = "Defensive";
+}
+
+if(isset($_POST['Stage'])) {
+    $stage = filter_input(POST, 'Stage');
+}
+
+if(isset($_POST['Region'])) {
+    $region = filter_input(POST, 'Region');
+} else {
+    $region = "";
+}
+
+if(isset($_POST['System'])) {
+    $system = filter_input(POST, 'System');
+} else {
+    $system = "";
+}
+
+if(isset($_POST['Planet'])) {
+    $planet = filter_input(POST, 'Planet');
+} else {
+    $planet = "";
+}
+
+if(isset($_POST['Moon'])) {
+    $moon = filter_input(POST, 'Moon');
+} else {
+    $moon = "";
+}
+
+if(isset($_POST['Owner'])) {
+    $owner = filter_input(POST, 'Owner');
+} else {
+    $owner = "";
+}
+
+if(isset($_POST['EVE_Time'])) {
+    $evetime = filter_input(POST, 'EVE_Time');
+} else {
+    $evetime = "";
+}
+
+if(isset($_POST['Notes'])) {
+    $notes = filter_input(POST, 'Notes');
+} else {
+    $notes = "";
+}
+
+if(isset($_POST['User'])) {
+    $user = filter_input(POST, 'User');
+} else {
+    $user = "";
+}
+
+$db = DBOpen();
+
+$db->insert('Timers', array(
+    'Type' => $type,
+    'Stage' => $stage,
+    'Region' => $region,
+    'System' => $system,
+    'Planet' => $planet,
+    'Moon' => $moon,
+    'Owner' => $owner,
+    'EVETime' => $evetime,
+    'Notes' => $notes,
+    'User' => $user
+));
+
+DBClose($db);
+
+//Go to the main site for timers in the timerboard
+$location = 'http://' . $_SERVER['HTTP_HOST'];
+$location = $location . dirname($_SERVER['PHP_SELF']) . '/timer/index.php';
+header("Location: $location");
+
+?>
