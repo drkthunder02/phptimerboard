@@ -22,21 +22,24 @@ if($_SESSION['logged'] != true AND $_SESSION['AccessLevel'] < 3 ) {
 PrintHTMLHeaderLogged();
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 
-//Print the form to add an alliance to the whitelist
-//Add timer form
-printf("<div class=\"container\">
-            <h3>Enter either the alliance name or alliance id of the alliance to add to the ability to login.</h3><br>
-            <form class=\"form-group\" action=\"/../process/removealliance.php\" method=\"POST\">
-                <div class=\"form-group\">
-                    <label for=\"AllianceName\">Alliance Name:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"AllianceName\" id=\"AllianceName\">
-                </div>
-                <div class=\"form-group\">
-                    <label for=\"AllianceId\">Alliance ID:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"AllianceId\" id=\"AllianceId\">
-                </div>
-            </form>
-        </div>");
+$db = DBOpen();
+
+$alliances = $db->fetchRowMany('SELECT * FROM Corporations WHERE AccessLevel>0');
+
+printf("<div class-\"container\">");
+printf("<form class=\"form-group\" action=\"/../process/removealliance.php\" method=\"POST\">");
+printf("<div class=\"form-group\">");
+printf("<label for=\"AllianceName\">Alliance Name: </label>");
+printf("<select class=\"form-control\" id=\"AllianceName\">");
+foreach($alliances as $ally) {
+    printf("<option>" . $ally['Name'] . "</option>");
+}
+printf("</select>");
+printf("</div>");
+printf("</form>");
+printf("</div>");
+
+DBClose($db);
 
 PrintHTMLFooterLogged();
 

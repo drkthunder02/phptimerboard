@@ -22,20 +22,24 @@ if($_SESSION['logged'] != true AND $_SESSION['AccessLevel'] < 3 ) {
 PrintHTMLHeaderLogged();
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 
-//Print the form to add an alliance to the whitelist
-//Add timer form
-printf("<div class=\"container\">
-            <form class=\"form-group\" action=\"/../process/removecorporation.php\" method=\"POST\">
-                <div class=\"form-group\">
-                    <label for=\"corporationName\">corporation Name:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"corporationName\" id=\"corporationName\">
-                </div>
-                <div class=\"form-group\">
-                    <label for=\"corporationId\">corporation ID:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"corporationId\" id=\"corporationId\">
-                </div>
-            </form>
-        </div>");
+$db = DBOpen();
+
+$corporations = $db->fetchRowMany('SELECT * FROM Corporations WHERE AccessLevel>0');
+
+printf("<div class-\"container\">");
+printf("<form class=\"form-group\" action=\"/../process/removecorporation.php\" method=\"POST\">");
+printf("<div class=\"form-group\">");
+printf("<label for=\"CorporationName\">Corporation Name: </label>");
+printf("<select class=\"form-control\" id=\"CorporationName\">");
+foreach($corporations as $corp) {
+    printf("<option>" . $corp['Name'] . "</option>");
+}
+printf("</select>");
+printf("</div>");
+printf("</form>");
+printf("</div>");
+
+DBClose($db);
 
 PrintHTMLFooterLogged();
 
