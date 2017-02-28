@@ -10,6 +10,13 @@ require_once __DIR__.'/../registry.php';
 
 $session = new Custom\Sessions\session();
 
+//If not allowed to access the page, delete all session variables, and exit
+if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
+    printf("You are not allowed access to this page.<br>");
+    unset($_SESSION);
+    die();
+}
+
 //Client ID and Secret Key for using ESI to find alliance information to be adding
 $clientid = '4d87d41740c24eac96f8b9e4b77ceb35';
 $secretkey = 'xNe3zYNHrQszmy5GfVk6AKbzUbwVFDgicd7zqrF7';

@@ -32,6 +32,7 @@ function SSOSuccess($char, $corp, $charID) {
     //1 - Read & Write Timers
     //2 - Read, Write, & Edit Timers
     //3 - Read & Write Timers, Administrator
+    //4 - Super Admin
     //Corporations should not have access level above 1
     //Characters can have higher than 1 access level.
     
