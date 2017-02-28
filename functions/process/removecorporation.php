@@ -17,23 +17,32 @@ if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
     die();
 }
 
-//Client ID and Secret Key for using ESI to find alliance information to be adding
-$clientid = '4d87d41740c24eac96f8b9e4b77ceb35';
-$secretkey = 'xNe3zYNHrQszmy5GfVk6AKbzUbwVFDgicd7zqrF7';
-$useragent = 'PHP Timerboard';
+PrintHTMLHeaderLogged();
+PrintNavBarLogged($character, $accessLevel);
 
 $db = DBOpen();
 
+//Get the corporation from the previous file
+$corp = filter_input(POST, 'CorporationName');
 
-//Get the Alliance Name from the form
-if(isset($_POST['CorporationName'])) {
-    $corporationName = filter_input(POST, 'CorporationName');
-} else {
-    $corporationName = NULL;
+//Update the access level to remove access from the corporation
+$db->update('Corporations', array('Name' => $corp), array('AccessLevel' => 0));
+//Cycle through characters of the corporation, and remove the characters of the corporation as well
+$corpRemoval = $db->fetchRow('SELECT * FROM Corporations WHERE Name= :name', array('name' => $corp));
+$characters = $db->fetchRowMany('SELECT * FROM Characters WHERE CorporationID= :id', array('id' => $corpRemoval['CorporationID']));
+foreach($characters as $char) {
+    $db->update('Characters', array('Name' => $char['Name']), array('AccessLevel' => 0));
 }
-//Get the Alliance ID from the form
-if(isset($_POST['CorporationId'])) {
-    $corporationId = filter_input(POST, 'CorporationId');
-} else {
-    $corporationId = NULL;
+
+//HTML for printout of all entities removed from access
+printf("<div class=\"container\">");
+printf("The Corporation removed from access list is " . $corpRemoval['Name'] . "<br>");
+printf("The Characters remove from the accest list are: <br>");
+foreach($characters as $char) {
+    printf($char['Name'] . "<br>");
 }
+printf("</div>");
+
+DBClose($db);
+
+?>
