@@ -76,6 +76,11 @@ if(isset($_POST['User'])) {
     $user = "";
 }
 
+//Turn the $evetime from a regular date entered into seconds time only
+//echo strtotime("2014-01-01 00:00:01")."<hr>";
+// output is 1388516401
+$time = strtotime($evetime);
+
 $db = DBOpen();
 
 $db->insert('Timers', array(
@@ -86,7 +91,7 @@ $db->insert('Timers', array(
     'Planet' => $planet,
     'Moon' => $moon,
     'Owner' => $owner,
-    'EVETime' => $evetime,
+    'EVETime' => $time,
     'Notes' => $notes,
     'User' => $user
 ));
