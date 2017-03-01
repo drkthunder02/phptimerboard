@@ -24,6 +24,15 @@ function SSOSuccess($char, $corp, $charID) {
                 'Corporation' => $char['corporation_id'],
                 'AccessLevel' => 1
             )); 
+            $corpFound = $db->fetchRow('SELECT * FROM Corporations WHERE CorporationID= :id', array('id' => $char['corporation_id']));
+            if($corpFound == false) {
+                $db->insert('Corporations', array(
+                    'CorporationID' => $char['corporation_id'],
+                    'Name' => $corp['corporation_name'],
+                    'AccessLevel' => 1,
+                    'AllianceID' => $corp['alliance_id']
+                ));
+            }
         }
     }
     

@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `Corporations` (
     `id` int(20) AUTO_INCREMENT,
     `CorporationID` varchar(12),
     `Name` varchar(100),
+    `AllianceID` varchar(12),
     `AccessLevel` int(1) DEFAULT 0,
     PRIMARY KEY (`id`),
     UNIQUE KEY `id` (`id`)

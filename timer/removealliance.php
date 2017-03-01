@@ -30,7 +30,7 @@ printf("<div class-\"container\">");
 printf("<form class=\"form-group\" action=\"/../process/removealliance.php\" method=\"POST\">");
 printf("<div class=\"form-group\">");
 printf("<label for=\"AllianceName\">Alliance Name: </label>");
-printf("<select class=\"form-control\" id=\"AllianceName\">");
+printf("<select class=\"form-control\" id=\"AllianceName\" name=\"AllianceName\">");
 foreach($alliances as $ally) {
     printf("<option>" . $ally['Name'] . "</option>");
 }
