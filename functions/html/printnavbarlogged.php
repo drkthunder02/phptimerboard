@@ -7,7 +7,7 @@
  */
 
 function PrintNavBarLogged($character, $accessLevel) {
-    if($accessLevel == 3) {
+    if($accessLevel == 3 || $accessLevel == 4) {
         printf("<div class=\"navbar navbar-inverse navbar-fixed-top\" style=\"height: 60px;\" role=\"navigation\">
                     <div class=\"navbar-header\">
                         <button class=\"navbar-toggle\" data-target=\".navbar-collapse\" data-toggle=\"collapse\" type=\"button\">

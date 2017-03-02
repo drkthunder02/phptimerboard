@@ -6,6 +6,10 @@
  * and open the template in the editor.
  */
 
+// PHP debug mode
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 //Get the required files from the function registry
 require_once __DIR__.'/functions/registry.php';
 
