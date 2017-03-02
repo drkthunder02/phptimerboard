@@ -6,6 +6,10 @@
  * and open the template in the editor.
  */
 
+// PHP debug mode
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 require_once __DIR__.'/../registry.php';
 
 $session = new Custom\Sessions\session();
@@ -18,9 +22,11 @@ if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
 }
 
 //Client ID and Secret Key for using ESI to find alliance information to be adding
-$clientid = '4d87d41740c24eac96f8b9e4b77ceb35';
-$secretkey = 'xNe3zYNHrQszmy5GfVk6AKbzUbwVFDgicd7zqrF7';
-$useragent = 'PHP Timerboard';
+$config = parse_ini_file('/../configuration/config.ini');
+
+$clientid = $config['clientid'];
+$secretkey = $config['secretkey'];
+$useragent = $config['useragent'];
 
 $db = DBOpen();
 
