@@ -6,33 +6,37 @@
  * and open the template in the editor.
  */
 
+// PHP debug mode
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 function SSOSuccess($char, $corp, $charID) {
     $db = DBOpen();
     
+    var_dump($char);
+    printf("<br>");
+    var_dump($charID);
+    printf("<br>");
+    
     $corpAccess = $db->fetchColumn('SELECT AccessLevel FROM Corporations WHERE CorporationID= :id', array('id' => $char['corporation_id']));
+    $corpAccess = $corpAccess * 1;
     $allyAccess = $db->fetchColumn('SELECT AccessLevel FROM Alliances WHERE AllianceID= :id', array('id' => $corp['alliance_id']));
+    $allyAccess = $allyAccess * 1;
     
     //Search for the character in the database to see if its the first time loggin in
     $first = $db->fetchRow('SELECT * FROM Characters WHERE CharacterID= :id', array('id' => $charID));
+    var_dump($first);
+    printf("<br>");
     //Need to check if corporation or alliance has access
-    if($first === false) {
+    if($first == false) {
         //Check if alliance is found and the access level
-        if($corpAccess > 0 && $allyAccess > 0) {
+        if($corpAccess > 0 || $allyAccess > 0) {
            $db->insert('Characters', array(
                 'CharacterID' => $charID,
                 'Name' => $char['name'],
-                'Corporation' => $char['corporation_id'],
+                'CorporationID' => $char['corporation_id'],
                 'AccessLevel' => 1
-            )); 
-            $corpFound = $db->fetchRow('SELECT * FROM Corporations WHERE CorporationID= :id', array('id' => $char['corporation_id']));
-            if($corpFound == false) {
-                $db->insert('Corporations', array(
-                    'CorporationID' => $char['corporation_id'],
-                    'Name' => $corp['corporation_name'],
-                    'AccessLevel' => 1,
-                    'AllianceID' => $corp['alliance_id']
-                ));
-            }
+            ));
         }
     }
     
@@ -47,12 +51,13 @@ function SSOSuccess($char, $corp, $charID) {
     
     $charAccess = $db->fetchColumn('SELECT AccessLevel FROM Characters WHERE CharacterID= :id', array('id' => $charID));
     
-    if($corpAccess == 0 OR $allyAccess == 0) {
+    if($corpAccess == 0 && $allyAccess == 0) {
         printf("Sorry but your alliance or corporation is not allowed to login.<br>");
+        printf("Alliance did not have access.  Corporation did not have access.<br>");
         die();
     }
     if($charAccess == 0) {
-        printf("Sorry but you do not have access to this timer board.<br>");
+        printf("Sorry but your character do not have access to this timer board.<br>");
         die();
     }
     

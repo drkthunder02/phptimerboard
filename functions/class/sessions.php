@@ -21,7 +21,7 @@ class session {
     }
     
     public function _open() {
-        $config = parse_ini_file(__DIR__.'/../../configuration/database.ini');
+        $config = parse_ini_file(__DIR__.'/../configuration/database.ini');
         //Setup our db object
         $this->db = new \Simplon\Mysql\Mysql(
             $config['server'],

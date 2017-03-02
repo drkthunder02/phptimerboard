@@ -18,7 +18,7 @@ require_once __DIR__.'/functions/registry.php';
 
 //Start a session
 $session = new \Custom\Sessions\session();
-$config = parse_ini_file('/functions/configuration/config.ini');
+$config = parse_ini_file(__DIR__.'/functions/configuration/config.ini');
 
 $clientid = $config['clientid'];
 $secretkey = $config['secretkey'];
