@@ -18,8 +18,11 @@ require_once __DIR__.'/functions/registry.php';
 
 //Start a session
 $session = new \Custom\Sessions\session();
-$clientid = '4d87d41740c24eac96f8b9e4b77ceb35';
-$secretkey = 'xNe3zYNHrQszmy5GfVk6AKbzUbwVFDgicd7zqrF7';
+$config = parse_ini_file('/functions/configuration/config.ini');
+
+$clientid = $config['clientid'];
+$secretkey = $config['secretkey'];
+$useragent = $config['useragent'];
 
 //If the state is not set then set it to NULL
 if(!isset($_SESSION['state'])) {
@@ -73,7 +76,6 @@ switch($_REQUEST['action']) {
             $fields_string .= $key.'='.$value.'&';
         }
         rtrim($fields_string, '&');
-        $useragent = 'PHP Timerboard';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
