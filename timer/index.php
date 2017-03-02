@@ -14,6 +14,8 @@ require_once __DIR__.'/../functions/registry.php';
 
 //Start the session
 $session = new \Custom\Sessions\session();
+//Open the database connection
+$db = DBOpen();
 
 PrintHTMLHeaderLogged();
 
@@ -30,6 +32,7 @@ $currentTime = time();
 
 //Print out the timers that are going on currently since we have printed out the navigation bar at the to"
 $timers = $db->fetchRowMany('SELECT * FROM Timers WHERE EVETime >= :now', array('now' => $currentTime));
+var_dump($timers);
 //Print out the table header and the start of the body tag
 printf("<div class=\"table table-striped\">
             <thead>
@@ -47,28 +50,35 @@ printf("<div class=\"table table-striped\">
                     <th>User</th>            
                 </tr>
             </thead><tbody>");
-foreach($timers as $timer) {
-    $now = time();
-    $remaining = $timer['EVETime'] - $now;
-    $remaining = date("Y-m-d H:i:s", $remaining);
-    $eveTime = date("Y-m-d H:i:s", $timer['EVETime']);
-    
-    printf("<tr>");
-    printf("<td>" . $timer['Type'] . "</td>");
-    printf("<td>" . $timer['Stage'] . "</td>");
-    printf("<td>" . $timer['Region'] . "</td>");
-    printf("<td>" . $timer['System'] . "</td>");
-    printf("<td>" . $timer['Planet'] . "</td>");
-    printf("<td>" . $timer['Moon'] . "</td>");
-    printf("<td>" . $timer['Owner'] . "</td>");
-    printf("<td>" . $eveTime . "</td>");
-    printf("<td>" . $remaining . "</td>");
-    printf("<td>" . $timer['Notes'] . "</td>");
-    printf("<td>" . $timer['User'] . "</td>");
-    printf("</tr>");
+
+if($timers != NULL) {
+    foreach($timers as $timer) {
+        $now = time();
+        $remaining = $timer['EVETime'] - $now;
+        $remaining = date("Y-m-d H:i:s", $remaining);
+        $eveTime = date("Y-m-d H:i:s", $timer['EVETime']);
+
+        printf("<tr>");
+        printf("<td>" . $timer['Type'] . "</td>");
+        printf("<td>" . $timer['Stage'] . "</td>");
+        printf("<td>" . $timer['Region'] . "</td>");
+        printf("<td>" . $timer['System'] . "</td>");
+        printf("<td>" . $timer['Planet'] . "</td>");
+        printf("<td>" . $timer['Moon'] . "</td>");
+        printf("<td>" . $timer['Owner'] . "</td>");
+        printf("<td>" . $eveTime . "</td>");
+        printf("<td>" . $remaining . "</td>");
+        printf("<td>" . $timer['Notes'] . "</td>");
+        printf("<td>" . $timer['User'] . "</td>");
+        printf("</tr>");
+    }  
 }
+
 printf("</tbody></div>");
 
 PrintHTMLFooterLogged();
+
+//Close the database connection
+DBClose($db);
 
 ?>
