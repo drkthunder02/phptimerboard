@@ -8,7 +8,7 @@
 
 function PrintNavBarLogged($character, $accessLevel) {
     if($accessLevel == 3 || $accessLevel == 4) {
-        printf("<div class=\"navbar navbar-inverse navbar-fixed-top\" style=\"height: 60px;\" role=\"navigation\">
+        printf("<div class=\"navbar navbar-fixed-top\" role=\"navigation\">
                     <div class=\"navbar-header\">
                         <button class=\"navbar-toggle\" data-target=\".navbar-collapse\" data-toggle=\"collapse\" type=\"button\">
                             <span class=\"sr-only\">Toggle navigation</span>
@@ -38,13 +38,13 @@ function PrintNavBarLogged($character, $accessLevel) {
                     </div>
                     <div class=\"collapse navbar-collapse pull-right\">
                         <ul class=\"nav navbar-nav\">
-                            <li><h2>" .  $character . " </h2></li>
+                            <li><h3>" .  $character . " </h3></li>
                             <li><a href=\"logout.php\">Log Out</a></li>
                         </ul>
                     </div>
                 </div>");
     } else if ($accessLevel == 2) {
-        printf("<div class=\"navbar navbar-inverse navbar-fixed-top\" style=\"height: 60px;\" role=\"navigation\">
+        printf("<div class=\"navbar navbar-fixed-top\" role=\"navigation\">
                     <div class=\"navbar-header\">
                         <button class=\"navbar-toggle\" data-target=\".navbar-collapse\" data-toggle=\"collapse\" type=\"button\">
                             <span class=\"sr-only\">Toggle navigation</span>
@@ -70,7 +70,7 @@ function PrintNavBarLogged($character, $accessLevel) {
                     </div>
                 </div>");
     } else {
-        printf("<div class=\"navbar navbar-inverse navbar-fixed-top\" style=\"height: 60px;\" role=\"navigation\">
+        printf("<div class=\"navbar navbar-fixed-top\" role=\"navigation\">
                     <div class=\"navbar-header\">
                         <button class=\"navbar-toggle\" data-target=\".navbar-collapse\" data-toggle=\"collapse\" type=\"button\">
                             <span class=\"sr-only\">Toggle navigation</span>

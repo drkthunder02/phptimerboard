@@ -25,6 +25,8 @@ if($_SESSION['logged'] != true) {
 PrintHTMLHeaderLogged();
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 
+printf("<br><br><br>");
+
 //Add timer form
 printf("<div class=\"container\">
             <form class=\"form-group\" action=\"/../process/addtimer.php\" method=\"POST\">
@@ -63,7 +65,10 @@ printf("<div class=\"container\">
                     <label for=\"Notes\">Notes:</label>
                     <input class=\"form-control\" type=\"text\" name=\"Notes\" id=\"Notes\">
                     <input class=\"form-control\" type=\"hidden\" name=\"User\" id=\"User\">
-                </div>    
+                </div>
+                <div class=\"form-group\">
+                    <input class=\"form-control\" type=\"Submit\" value=\"Submit Timer\">
+                </div>
             </form>
         </div>");
 

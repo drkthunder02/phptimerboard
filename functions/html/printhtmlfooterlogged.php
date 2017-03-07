@@ -8,7 +8,9 @@
 
 function PrintHTMLFooterLogged() {
     printf("<hr>");
+    printf("<div class=\"container\" align=\"center\">");
     printf("PHP Timerboard written by Lowjack Tzetsu.");
+    printf("</div>");
 }
 
 ?>
