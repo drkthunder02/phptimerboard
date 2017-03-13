@@ -6,7 +6,11 @@
  * and open the template in the editor.
  */
 
-require_once __DIR__.'/../functions/registry.php';
+// PHP debug mode
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
+require_once __DIR__.'/../../functions/registry.php';
 
 //Start a session
 $session = new \Custom\Sessions\session();
@@ -19,59 +23,61 @@ if($_SESSION['logged'] != true) {
 }
 
 if(isset($_POST['Type'])) {
-    $type = filter_input(POST, 'Type');
+    $type = filter_input(INPUT_POST, 'Type');
 } else {
-    $type = "Defensive";
+    $type = "";
 }
 
 if(isset($_POST['Stage'])) {
-    $stage = filter_input(POST, 'Stage');
+    $stage = filter_input(INPUT_POST, 'Stage');
+} else {
+    $stage = "";
 }
 
 if(isset($_POST['Region'])) {
-    $region = filter_input(POST, 'Region');
+    $region = filter_input(INPUT_POST, 'Region');
 } else {
     $region = "";
 }
 
 if(isset($_POST['System'])) {
-    $system = filter_input(POST, 'System');
+    $system = filter_input(INPUT_POST, 'System');
 } else {
     $system = "";
 }
 
 if(isset($_POST['Planet'])) {
-    $planet = filter_input(POST, 'Planet');
+    $planet = filter_input(INPUT_POST, 'Planet');
 } else {
     $planet = "";
 }
 
 if(isset($_POST['Moon'])) {
-    $moon = filter_input(POST, 'Moon');
+    $moon = filter_input(INPUT_POST, 'Moon');
 } else {
     $moon = "";
 }
 
 if(isset($_POST['Owner'])) {
-    $owner = filter_input(POST, 'Owner');
+    $owner = filter_input(INPUT_POST, 'Owner');
 } else {
     $owner = "";
 }
 
 if(isset($_POST['EVE_Time'])) {
-    $evetime = filter_input(POST, 'EVE_Time');
+    $evetime = filter_input(INPUT_POST, 'EVE_Time');
 } else {
     $evetime = "";
 }
 
 if(isset($_POST['Notes'])) {
-    $notes = filter_input(POST, 'Notes');
+    $notes = filter_input(INPUT_POST, 'Notes');
 } else {
     $notes = "";
 }
 
 if(isset($_POST['User'])) {
-    $user = filter_input(POST, 'User');
+    $user = filter_input(INPUT_POST, 'User');
 } else {
     $user = "";
 }

@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/var/www/timerboard/functions/html/printnavbarlogged.php</file>
-            <file>file:/var/www/timerboard/timer/logout.php</file>
-            <file>file:/var/www/timerboard/functions/html/printhtmlfooterlogged.php</file>
-            <file>file:/var/www/timerboard/functions/html/printhtmlheaderlogged.php</file>
-            <file>file:/var/www/timerboard/timer/index.php</file>
-            <file>file:/var/www/timerboard/timer/add.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

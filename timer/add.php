@@ -29,7 +29,7 @@ printf("<br><br><br>");
 
 //Add timer form
 printf("<div class=\"container\">
-            <form class=\"form-group\" action=\"/../process/addtimer.php\" method=\"POST\">
+            <form class=\"form-group\" action=\"../functions/process/addtimer.php\" method=\"POST\">
                 <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Offensive\">Offensive</label>
                 <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Defensive\">Defense</label>
                 <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Fuel\">Fuel</label>
@@ -59,13 +59,14 @@ printf("<div class=\"container\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"EVE_Time\">EVE Time:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"EVE_Time\" id=\"EVE_Time\">
+                    <input class=\"form-control\" type=\"text\" name=\"EVE_Time\" id=\"EVE_Time\" placeholder=\"03/10/2017 12:00\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"Notes\">Notes:</label>
                     <input class=\"form-control\" type=\"text\" name=\"Notes\" id=\"Notes\">
-                    <input class=\"form-control\" type=\"hidden\" name=\"User\" id=\"User\">
+                    <input class=\"form-control\" type=\"hidden\" name=\"User\" id=\"User\" value=\"" . $_SESSION['Character'] . ">
                 </div>
+                <br>
                 <div class=\"form-group\">
                     <input class=\"form-control\" type=\"Submit\" value=\"Submit Timer\">
                 </div>
