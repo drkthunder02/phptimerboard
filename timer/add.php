@@ -64,10 +64,9 @@ printf("<div class=\"container\">
                 <div class=\"form-group\">
                     <label for=\"Notes\">Notes:</label>
                     <input class=\"form-control\" type=\"text\" name=\"Notes\" id=\"Notes\">
-                    <input class=\"form-control\" type=\"hidden\" name=\"User\" id=\"User\" value=\"" . $_SESSION['Character'] . ">
+                    <input class=\"form-control\" type=\"hidden\" name=\"User\" id=\"User\" value=\"" . $_SESSION['Character'] . "\">
                 </div>
-                <br>
-                <div class=\"form-group\">
+                <div class=\"form-group\"><br>
                     <input class=\"form-control\" type=\"Submit\" value=\"Submit Timer\">
                 </div>
             </form>

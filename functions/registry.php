@@ -11,6 +11,7 @@ require_once __DIR__.'/../functions/database/dbclose.php';
 require_once __DIR__.'/../functions/database/dbopen.php';
 
 //HTML Functions
+require_once __DIR__.'/../functions/html/printconverttime.php';
 require_once __DIR__.'/../functions/html/printhtmlfooterlogged.php';
 require_once __DIR__.'/../functions/html/printhtmlheader.php';
 require_once __DIR__.'/../functions/html/printhtmlheaderlogged.php';

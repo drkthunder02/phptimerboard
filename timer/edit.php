@@ -29,26 +29,27 @@ if($_SESSION['logged'] != true) {
 //Print the navbar
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 
-$currentTime = time();
-
 //Print out the timers that are going on currently since we have printed out the navigation bar at the to"
+$currentTime = time();
 $timers = $db->fetchRowMany('SELECT * FROM Timers WHERE EVETime >= :now', array('now' => $currentTime));
 
 //Print out the table header and the start of the body tag
 printf("<br><br><br>");
 
 printf("<div class=\"container\">");
+printf("<form action=\"/functions/html/printedittimer.php\" method=\"POST\">");
 printf("<table class=\"table-reponsive\">
             <thead>
                 <tr>
                     <th class=\"col-md-1\">Type</th>
                     <th class=\"col-md-1\">Stage</th>
-                    <th class=\"col-md-3\">Location</th>
+                    <th class=\"col-md-2\">Location</th>
                     <th class=\"col-md-1\">Owner</th>
                     <th class=\"col-md-1\">EVE Time</th>
                     <th class=\"col-md-1\">Remaining</th>
                     <th class=\"col-md-3\">Notes</th>
-                    <th class=\"col-md-1\">User</th>            
+                    <th class=\"col-md-1\">User</th>
+                    <th class=\"col-md-1\">Modify</th>
                 </tr>
             </thead>");
 
@@ -78,6 +79,7 @@ if($timers != NULL) {
         printf("<td class=\"col-md-1\">" . $remaining . "</td>");
         printf("<td class=\"col-md-2\">" . $timer['Notes'] . "</td>");
         printf("<td class=\"col-md-1\">" . $timer['User'] . "</td>");
+        printf("<td class=\"col-md-1\"><input type=\"radio\" value=\"" . $timer['id'] . " name=\"TimerID\"></td>");
         printf("</tr>");
     }  
     printf("</tbody>");
@@ -97,12 +99,14 @@ if($timers != NULL) {
 }
 
 printf("</table>");
+printf("<br>");
+printf("<div class=\"container\">");
+printf("<input class=\"col-md-offset-10\" type=\"Submit\" value=\"Modify Selected Timer\">");
 printf("</div>");
+printf("</form>");
 
 PrintHTMLFooterLogged();
 printf("</html>");
 
 //Close the database connection
 DBClose($db);
-
-?>
