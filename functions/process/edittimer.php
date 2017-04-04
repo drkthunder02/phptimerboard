@@ -10,7 +10,7 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-require_once __DIR__.'/../functions/registry.php';
+require_once __DIR__.'/../../functions/registry.php';
 
 //Start the session
 $session = new \Custom\Sessions\session();
@@ -34,42 +34,42 @@ if(isset($_POST['id'])) {
     //Get all of the other POST values
     if(isset($_POST['Type'])) {
         $type = filter_input(INPUT_POST, "Type", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if($oldTimer['Type'] != $type) {
+        if($oldTimer['Type'] != $type && $type != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Type' => $type));
         }
     }
 
     if(isset($_POST['Stage'])) {
         $stage = filter_input(INPUT_POST, "Stage", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if($oldTimer['Stage'] != $stage) {
+        if($oldTimer['Stage'] != $stage && $stage != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Stage' => $stage));
         }
     }
 
     if(isset($_POST['Region'])) {
         $region = filter_input(INPUT_POST, "Region", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if($oldTimer['Region'] != $region) {
+        if($oldTimer['Region'] != $region && $region != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Region' => $region));
         }
     } 
 
     if(isset($_POST['System'])) {
         $system = filter_input(INPUT_POST, "System", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if($oldTimer['System'] != $system) {
+        if($oldTimer['System'] != $system && $system != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('System' => $system));
         }
     }
 
     if(isset($_POST['Planet'])) {
         $planet = filter_input(INPUT_POST, "Planet", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if($oldTimer['Planet'] != $planet) {
+        if($oldTimer['Planet'] != $planet && $planet != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Planet' => $planet));
         }
     } 
 
     if(isset($_POST['Moon'])) {
         $moon = filter_input(INPUT_POST, "Moon", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if($oldTimer['Moon'] != $moon) {
+        if($oldTimer['Moon'] != $moon && $moon != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Moon' => $moon));
         }
     } 
@@ -77,14 +77,14 @@ if(isset($_POST['id'])) {
     if(isset($_POST['Time'])) {
         $time = filter_input(INPUT_POST, "Time", FILTER_SANITIZE_SPECIAL_CHARS);
         $time = strtotime($time);
-        if($oldTimer['Time'] != $time) {
+        if($oldTimer['Time'] != $time && $time != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Time' => $time));
         }
     } 
 
     if(isset($_POST['Notes'])) {
         $notes = filter_input(INPUT_POST, "Notes", FILTER_SANITIZE_SPECIAL_CHARS);
-        if($oldTimer['Notes'] != $notes) {
+        if($oldTimer['Notes'] != $notes && $notes != NULL) {
             $db->update('Timers', array('id' => $oldTimer['id']), array('Notes' => $notes));
         }
     }

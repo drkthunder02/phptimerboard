@@ -68,7 +68,7 @@ if($timers != NULL) {
             printf("<tr class=\"info\">");
         }
         
-        $location = $timer['Region'] . " - " . $timer['System'] . " - " . $timer['Planet'] . " - " . $timer['Moon'];
+        $location = $timer['Region'] . " | " . $timer['System'] . " | " . $timer['Planet'] . " | " . $timer['Moon'];
         
         printf("<td class=\"col-md-1\">" . $timer['Type'] . "</td>");
         printf("<td class=\"col-md-1\">" . $timer['Stage'] . "</td>");

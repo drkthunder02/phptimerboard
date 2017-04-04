@@ -22,7 +22,7 @@ if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
 }
 
 //Client ID and Secret Key for using ESI to find alliance information to be adding
-$config = parse_ini_file('/../configuration/config.ini');
+$config = parse_ini_file('../configuration/config.ini');
 
 $clientid = $config['clientid'];
 $secretkey = $config['secretkey'];
@@ -33,13 +33,13 @@ $db = DBOpen();
 
 //Get the Alliance Name from the form
 if(isset($_POST['AllianceName'])) {
-    $allianceName = filter_input(POST, 'AllianceName');
+    $allianceName = filter_input(INPUT_POST, 'AllianceName', FILTER_SANITIZE_SPECIAL_CHARS);
 } else {
     $allianceName = NULL;
 }
 //Get the Alliance ID from the form
 if(isset($_POST['AllianceId'])) {
-    $allianceId = filter_input(POST, 'AllianceId');
+    $allianceId = filter_input(INPUT_POST, 'AllianceId', FILTER_SANITIZE_SPECIAL_CHARS);
 } else {
     $allianceId = NULL;
 }
@@ -78,8 +78,11 @@ if($allianceId != NULL) {
     $row = $db->fetchRow('SELECT * FROM AllianceNames WHERE Name= :name', array('name' => $allianceName));
     if($row == false) {
         PrintHTMLHeaderLogged();
-        PrintNavBarLogged($character, $accessLevel);
-        printf("Unable to find the name in the database.  Please try again but enter the alliance id instead.<br>");
+        PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
+        printf("<br><br><br>");
+        printf("<div class=\"container\">");
+        printf("<p align=\"center\">Unable to find the name in the database.  Please try again but enter the alliance id instead.</p>");
+        printf("</div>");
         PrintHTMLFooterLogged();
     }
     //See if the name is already in the access list
@@ -99,6 +102,6 @@ DBClose($db);
 //Go to the main site for timers in the timerboard
 $location = 'http://' . $_SERVER['HTTP_HOST'];
 $location = $location . dirname($_SERVER['PHP_SELF']) . '/timer/index.php';
-header("Location: $location");
+//header("Location: $location");
 
 ?>

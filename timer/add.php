@@ -30,9 +30,9 @@ printf("<br><br><br>");
 //Add timer form
 printf("<div class=\"container\">
             <form class=\"form-group\" action=\"../functions/process/addtimer.php\" method=\"POST\">
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Offensive\">Offensive</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Defensive\">Defense</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Fuel\">Fuel</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Offensive\">Offensive</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Defensive\">Defense</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Fuel\">Fuel</label>
                 <div class=\"form-group\">
                     <label for=\"Stage\">Stage:</label>
                     <input class=\"form-control\" type=\"text\" name=\"Stage\" id=\"Stage\">

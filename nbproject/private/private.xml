@@ -3,11 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/timerboard/functions/html/printedittimer.php</file>
-            <file>file:/var/www/timerboard/timer/edit.php</file>
-            <file>file:/var/www/timerboard/functions/process/addtimer.php</file>
-            <file>file:/var/www/timerboard/functions/process/edittimer.php</file>
-            <file>file:/var/www/timerboard/timer/index.php</file>
+            <file>file:/var/www/timerboard/timer/modifycharacter.php</file>
         </group>
     </open-files>
 </project-private>

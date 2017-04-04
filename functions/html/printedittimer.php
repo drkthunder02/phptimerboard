@@ -11,7 +11,7 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-require_once __DIR__.'/../functions/registry.php';
+require_once __DIR__.'/../../functions/registry.php';
 
 //Start the session
 $session = new \Custom\Sessions\session();
@@ -35,12 +35,14 @@ if(isset($_POST['TimerID'])) {
 
 //Open the database connection
 $db = DBOpen();
-
+//Print the HTML Header section
+print("<html>");
+PrintHTMLHeaderLogged();
 //Print the navbar
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 
 //Print out the timers that are going on currently since we have printed out the navigation bar at the to"
-$timer = $db->fetchRowMany('SELECT * FROM Timers WHERE id= :id', array('id' => $timerId));
+$timer = $db->fetchRow('SELECT * FROM Timers WHERE id= :id', array('id' => $timerId));
 //Convert the time back to regular format instead of integer
 $time = date("Y-m-d H:i:s", $timer['EVETime']);
 
@@ -48,47 +50,40 @@ $time = date("Y-m-d H:i:s", $timer['EVETime']);
 printf("<br><br><br>");
 
 printf("<div class=\"container\">
-            <form class=\"form-group\" action=\"../functions/process/addtimer.php\" method=\"POST\">");
+            <form class=\"form-group\" action=\"../../functions/process/edittimer.php\" method=\"POST\">");
+        printf("<input class=\"form-control\" type=\"hidden\" name=\"id\" id=\"id\" value=\"" . $timer['id'] . "\">");
 if($timer['Type'] == "Offensive") {
-        printf("<label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Offensive\" checked>Offensive</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Defensive\">Defense</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Fuel\">Fuel</label>");
-} else if($timer['Type'] == "Defense") {
-        printf("<label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Offensive\">Offensive</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Defensive\" checked>Defense</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Fuel\">Fuel</label>");
+        printf("<label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Offensive\" checked>Offensive</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Defensive\">Defense</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Fuel\">Fuel</label>");
+} else if($timer['Type'] == "Defensive") {
+        printf("<label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Offensive\">Offensive</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Defensive\" checked>Defense</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Fuel\">Fuel</label>");
 } else if($timer['Type'] == "Fuel") {
-        printf("<label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Offensive\">Offensive</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Defensive\">Defense</label>
-                <label class=\"checkbox-inline\"><input type=\"checkbox\" name=\"Type\" value=\"Fuel\" checked>Fuel</label>");
+        printf("<label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Offensive\">Offensive</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Defensive\">Defensive</label>
+                <label class=\"radio-inline\"><input type=\"radio\" name=\"Type\" value=\"Fuel\" checked>Fuel</label>");
 }  
             printf("<div class=\"form-group\">
                     <label for=\"Stage\">Stage:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"Stage\" id=\"Stage\" placeholder=\"" . $timer['Stage'] . ">
+                    <input class=\"form-control\" type=\"text\" name=\"Stage\" id=\"Stage\" placeholder=\"" . $timer['Stage'] . "\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"Region\">Region:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"Region\" id=\"Region\" placeholder=\"" . $timer['Region'] . ">
+                    <input class=\"form-control\" type=\"text\" name=\"Region\" id=\"Region\" placeholder=\"" . $timer['Region'] . "\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"System\">System:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"System\" id=\"System\" placeholder=\"" . $timer['System'] . ">
+                    <input class=\"form-control\" type=\"text\" name=\"System\" id=\"System\" placeholder=\"" . $timer['System'] . "\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"Planet\">Planet:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"Planet\" id=\"Planet\" placeholder=\"" . $timer['Planet'] . ">
+                    <input class=\"form-control\" type=\"text\" name=\"Planet\" id=\"Planet\" placeholder=\"" . $timer['Planet'] . "\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"Moon\">Moon:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"Moon\" id=\"Moon\" placeholder=\"" . $timer['Moon'] . ">
-                </div>
-                <div class=\"form-group\">
-                    <label for=\"Owner\">Owner:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"Owner\" id=\"Owner\" placeholder=\"" . $timer['Owner'] . ">
-                </div>
-                <div class=\"form-group\">
-                    <label for=\"EVE_Time\">EVE Time:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"EVE_Time\" id=\"EVE_Time\" placeholder=\"" . $time . "\">
+                    <input class=\"form-control\" type=\"text\" name=\"Moon\" id=\"Moon\" placeholder=\"" . $timer['Moon'] . "\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"Notes\">Notes:</label>

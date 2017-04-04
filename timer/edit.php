@@ -37,7 +37,7 @@ $timers = $db->fetchRowMany('SELECT * FROM Timers WHERE EVETime >= :now', array(
 printf("<br><br><br>");
 
 printf("<div class=\"container\">");
-printf("<form action=\"/functions/html/printedittimer.php\" method=\"POST\">");
+printf("<form action=\"../functions/html/printedittimer.php\" method=\"POST\">");
 printf("<table class=\"table-reponsive\">
             <thead>
                 <tr>
@@ -61,11 +61,11 @@ if($timers != NULL) {
         $remaining = ConvertTime($remaining);
         $eveTime = date("Y-m-d H:i:s", $timer['EVETime']);
         
-        if($timer['Type'] == 'Defensive') {
+        if($timer['Type'] == "Defensive") {
             printf("<tr class=\"warning\">");
-        } else if ($timer['Type'] == 'Offensive') {
+        } else if ($timer['Type'] == "Offensive") {
             printf("<tr class=\"danger\">");
-        } else if ($timer['Type'] == 'Structure') {
+        } else if ($timer['Type'] == "Fuel") {
             printf("<tr class=\"info\">");
         }
         
@@ -79,7 +79,7 @@ if($timers != NULL) {
         printf("<td class=\"col-md-1\">" . $remaining . "</td>");
         printf("<td class=\"col-md-2\">" . $timer['Notes'] . "</td>");
         printf("<td class=\"col-md-1\">" . $timer['User'] . "</td>");
-        printf("<td class=\"col-md-1\"><input type=\"radio\" value=\"" . $timer['id'] . " name=\"TimerID\"></td>");
+        printf("<td class=\"col-md-1\"><input type=\"radio\" value=\"" . $timer['id'] . "\" name=\"TimerID\"></td>");
         printf("</tr>");
     }  
     printf("</tbody>");
@@ -99,6 +99,7 @@ if($timers != NULL) {
 }
 
 printf("</table>");
+printf("</div>");
 printf("<br>");
 printf("<div class=\"container\">");
 printf("<input class=\"col-md-offset-10\" type=\"Submit\" value=\"Modify Selected Timer\">");
@@ -110,3 +111,5 @@ printf("</html>");
 
 //Close the database connection
 DBClose($db);
+
+?>

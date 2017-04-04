@@ -15,7 +15,8 @@ require_once __DIR__.'/../functions/registry.php';
 $session = new Custom\Sessions\session();
 
 PrintHTMLHeaderLogged();
-PrintNavBarLogged($character, $accessLevel);
+PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
+printf("<br><br><br>");
 
 //If not allowed to access the page, delete all session variables, and exit
 if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
@@ -23,7 +24,7 @@ if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
     unset($_SESSION);
     die();
 }
-
+//Open the database connection
 $db = DBOpen();
 
 switch($_GET['part']) {
@@ -62,12 +63,13 @@ switch($_GET['part']) {
             printf("<option>");
             printf($char['Name']);
             printf(" Access Level: ");
-            printf($char['Access Level']);
+            printf($char['AccessLevel']);
             printf("</option>");
         }
         printf("<option></option>
-                </select>
-            </form>
+                </select>");
+        
+        printf("</form>
         </div>");
         break;
 }

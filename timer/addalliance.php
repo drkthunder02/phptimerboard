@@ -11,7 +11,7 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 //Get the required files from the function registry
-require_once __DIR__.'/functions/registry.php';
+require_once __DIR__.'/../functions/registry.php';
 
 //Start a session
 $session = new \Custom\Sessions\session();
@@ -25,12 +25,12 @@ if($_SESSION['logged'] != true AND $_SESSION['AccessLevel'] < 3 ) {
 
 PrintHTMLHeaderLogged();
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
-
+printf("<br><br>");
 //Print the form to add an alliance to the whitelist
 //Add timer form
 printf("<div class=\"container\">
             <h3>Enter either the alliance name or alliance id of the alliance to add to the ability to login.</h3><br>
-            <form class=\"form-group\" action=\"/../process/addalliance.php\" method=\"POST\">
+            <form class=\"form-group\" action=\"../functions/process/addalliance.php\" method=\"POST\">
                 <div class=\"form-group\">
                     <label for=\"AllianceName\">Alliance Name:</label>
                     <input class=\"form-control\" type=\"text\" name=\"AllianceName\" id=\"AllianceName\">
@@ -38,6 +38,9 @@ printf("<div class=\"container\">
                 <div class=\"form-group\">
                     <label for=\"AllianceId\">Alliance ID:</label>
                     <input class=\"form-control\" type=\"text\" name=\"AllianceId\" id=\"AllianceId\">
+                </div>
+                <div class=\"form-group\">
+                    <input class=\"form-control\" type=\"Submit\" value=\"Add Alliance\">
                 </div>
             </form>
         </div>");

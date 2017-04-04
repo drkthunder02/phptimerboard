@@ -78,8 +78,11 @@ if($corporationId != NULL) {
     $row = $db->fetchRow('SELECT * FROM CorporationNames WHERE Name= :name', array('name' => $corporationName));
     if($row == false) {
         PrintHTMLHeaderLogged();
-        PrintNavBarLogged($character, $accessLevel);
-        printf("Unable to find the name in the database.  Please try again but enter the corporation id instead.<br>");
+        PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
+        printf("<br><br><br>");
+        printf("<div class=\"container\">");
+        printf("<p align=\"center\">Unable to find the name in the database.  Please try again but enter the corporation id instead.</p>");
+        printf("</div>");
         PrintHTMLFooterLogged();
     }
     //See if the name is already in the access list

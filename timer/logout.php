@@ -18,11 +18,12 @@ if($_SESSION['logged'] != true) {
     die();
 }
 
-unset($_SESSION);
+session_destroy();
 
 //Go to the main site for timers in the timerboard
 $location = 'http://' . $_SERVER['HTTP_HOST'];
-$location = $location . dirname($_SERVER['PHP_SELF']) . '/index.php';
+$location = $location . dirname($_SERVER['PHP_SELF']) . '/../index.php';
+var_dump($location);
 header("Location: $location");
 
 ?>
