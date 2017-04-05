@@ -108,21 +108,3 @@ CREATE TABLE IF NOT EXISTS `CorporationNames` (
     PRIMARY KEY (`CorporationID`),
     UNIQUE KEY `CorporationID` (`CorporationID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Insert for Alliance for super admin
---
-
-INSERT INTO `Alliances` VALUES (1, '99004116', 'Warped Intentions', 1);
-
---
--- Insert for Corporation for super admin
---
-
-INSERT INTO `Corporations` VALUES (1, '98251577', 'Astrocomical', '99004116', 1);
-
---
--- Insert for Character for super admin
---
-
-INSERT INTO `Characters` VALUES (1, '92626011', 'Minerva Arbosa', '98251577', 4);

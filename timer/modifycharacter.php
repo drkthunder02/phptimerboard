@@ -29,24 +29,31 @@ $db = DBOpen();
 
 switch($_GET['part']) {
     case 2:
-        $charAccessChange = filter_input(POST, 'Characters');
+        $charAccessChange = filter_input(INPUT_POST, 'Characters');
         printf("<div class=\"container\">");
         printf("<form class=\"form-group\" method=\"POST\" action=\"modifycharacter.php?part=3\">");
-        printf("<label for=\"NewAccessLevel\">Select Access Level</label>");
-        printf("<select class=\"form-group\" id=\"NewAccessLevel\" name=\"NewAccessLevel\">");
+        printf("<input type=\"hidden\" name=\"Character\" id=\"Character\" value=\"" . $charAccessChange . "\">");
+        printf("<label for=\"NewAccessLevel\">Select Access Level</label><br>");
+        printf("<select class=\"form-control\" id=\"NewAccessLevel\" name=\"NewAccessLevel\">");
         printf("<option>2</option><option>3</option><option>4</option>");
-        printf("</select>");
-        printf("<input type=\"hidden\" name=\"Character\" value=\"" . $charAccessChange . ">");
+        printf("</select><br>");
+        printf("<input class=\"form-control\" type=\"Submit\" value=\"Modify Character\">");
+        
         printf("</form>");
         printf("</div>");
         break;
     case 3:
-        $charAccessChange = filter_input(POST, 'Character');
-        $newAccessLevel = filter_input(POST, 'NewAccessLevel');
-        $db->update('Characters', array('Name' => $charAccessChange), array('AccessLevel' => $newAccessLevel));
-        printf("<div class=\"container\">");
-        printf("Character: " . $charAccessChange . " updated to access level " . $newAccessLevel . "<br>");
-        printf("</div>");
+        $charAccessChange = filter_input(INPUT_POST, 'Character');
+        $newAccessLevel = filter_input(INPUT_POST, 'NewAccessLevel');
+        if($db->update('Characters', array('Name' => $charAccessChange), array('AccessLevel' => $newAccessLevel))) {
+            printf("<div class=\"container\">");
+            printf("Character: " . $charAccessChange . " updated to access level " . $newAccessLevel . "<br>");
+            printf("</div>"); 
+        } else {
+            printf("<div class=\"container\">");
+            printf("Character: " . $charAccessChange . "not found in the database.  Report the error to an admin.");
+            printf("</div>");
+        }
         break;
     default:
         //Get the characters from the database
@@ -58,9 +65,9 @@ switch($_GET['part']) {
         printf("<div class=\"container\">
                     <form class=\"form-group\" method=\"POST\" action=\"modifycharacter.php?part=2\">
                         <label for=\"Characters\">Characters:</label>
-                        <select class=\"form-group\" id=\"Characters\" name=\"Characters\">");
+                        <select class=\"form-control\" id=\"Characters\" name=\"Characters\">");
         foreach($characters as $char) {
-            printf("<option>");
+            printf("<option value=\"" . $char['Name'] . "\">");
             printf($char['Name']);
             printf(" Access Level: ");
             printf($char['AccessLevel']);
@@ -68,7 +75,10 @@ switch($_GET['part']) {
         }
         printf("<option></option>
                 </select>");
-        
+        printf("<br>");
+        printf("<div class=\"container col-md-4\">");
+        printf("<input class=\"form-control\" type=\"Submit\" value=\"Choose Character to Modify\">");
+        printf("</div>");
         printf("</form>
         </div>");
         break;
