@@ -17,3 +17,5 @@ Future Updates:
 - information.
 
 - Utilize ESI for further functionality to include automated timers if CCP gives access to those end points.
+
+- Retool main page to include ajax calls to automatically reload page every minute or so.
