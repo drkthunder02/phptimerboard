@@ -102,6 +102,6 @@ DBClose($db);
 //Go to the main site for timers in the timerboard
 $location = 'http://' . $_SERVER['HTTP_HOST'];
 $location = $location . dirname($_SERVER['PHP_SELF']) . '/timer/index.php';
-//header("Location: $location");
+header("Location: $location");
 
 ?>
