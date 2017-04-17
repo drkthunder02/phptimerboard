@@ -7,7 +7,7 @@
  */
 
 function PrintNavBarLogged($character, $accessLevel) {
-    $location = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF'], 1) . "/";
+    $location = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/";
     $location = str_replace(array('/functions/html', '/functions/process'), '/timer', $location);
     
     if($accessLevel == 3 || $accessLevel == 4) {

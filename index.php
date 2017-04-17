@@ -147,10 +147,11 @@ switch($_REQUEST['action']) {
         
         $installed = $db->fetchColumn('SELECT Installed FROM Install');
         if($installed == 0) {
-            Install($db, $characterID, $character, $corporation);
+            Install($db, $characterID, $character, $corporation, $useragent);
+            die();
         }
         
-        SSOSuccess($character, $corporation, $characterID, $useragent);
+        SSOSuccess($character, $corporation, $characterID);
         
         break;
     //If we don't know what state we are in then go back to the beginning

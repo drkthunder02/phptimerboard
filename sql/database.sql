@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for `Timers`
+-- Table structure for `Timers`1
 --
 
 CREATE TABLE IF NOT EXISTS `Timers` (
@@ -126,8 +126,10 @@ CREATE TABLE IF NOT EXISTS `Logs` (
 -- Table structure for `Install`
 --
 
-CREATE TABLE IF NOT EXISTS `Installation` (
-    `Installed` tinyint(1)
+CREATE TABLE IF NOT EXISTS `Install` (
+    `Installed` tinyint(1),
+    PRIMARY KEY (`Installed`),
+    UNIQUE KEY `Installed` (`Installed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `Install` (`Installed`) VALUES (0);

@@ -46,7 +46,7 @@ function Install($db, $characterID, $character, $corporation, $useragent) {
         }
         $corporationIds = json_decode($result, true);
         //Get the corporation information for each corporation in the alliance, then insert them into the database
-        foreach($corporationsIds as $id) {
+        foreach($corporationIds as $id) {
             $url = 'https://esi.tech.ccp.is/latest/corporations/' . $id . '/?datasource=tranquility';
             $header = 'Accept: application/json';
             $ch = curl_init();
