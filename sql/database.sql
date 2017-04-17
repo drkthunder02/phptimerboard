@@ -108,3 +108,26 @@ CREATE TABLE IF NOT EXISTS `CorporationNames` (
     PRIMARY KEY (`CorporationID`),
     UNIQUE KEY `CorporationID` (`CorporationID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for `Logs`
+-- 
+
+CREATE TABLE IF NOT EXISTS `Logs` (
+    `id` int(20) AUTO_INCREMENT,
+    `User` varchar(100),
+    `Entry` text,
+    `Timestamp` timestamp,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for `Install`
+--
+
+CREATE TABLE IF NOT EXISTS `Install` (
+    `Installed` bool,
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `Install` (`Installed`) VALUES (0);

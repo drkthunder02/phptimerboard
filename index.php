@@ -24,6 +24,8 @@ $clientid = $config['clientid'];
 $secretkey = $config['secretkey'];
 $useragent = $config['useragent'];
 
+$db = DBOpen();
+
 //If the state is not set then set it to NULL
 if(!isset($_SESSION['state'])) {
     $_SESSION['state'] = uniqid();
@@ -88,7 +90,6 @@ switch($_REQUEST['action']) {
         $result = curl_exec($ch);
         //Get the resultant data from the curl call
         $data = json_decode($result, true);
-        var_dump($data);
         //With the access token and refresh token make the cURL call to get the characterID
         $url = 'https://login.eveonline.com/oauth/verify';
         $header='Authorization: Bearer ' . $data['access_token']; 
@@ -143,8 +144,13 @@ switch($_REQUEST['action']) {
             die();
         }
         $corporation = json_decode($result, true);
-           
-        SSOSuccess($character, $corporation, $characterID);
+        
+        $installed = $db->fetchColumn('SELECT Installed FROM Install');
+        if($installed == 0) {
+            Install($db, $characterID, $character, $corporation);
+        }
+        
+        SSOSuccess($character, $corporation, $characterID, $useragent);
         
         break;
     //If we don't know what state we are in then go back to the beginning
@@ -152,6 +158,8 @@ switch($_REQUEST['action']) {
         RedirectToNew();
         break;
 }
+
+DBClose($db);
 
 printf("</body>");
 printf("</html>");

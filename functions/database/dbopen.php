@@ -7,14 +7,12 @@
  */
 
 function DBOpen() {
-    //$config = parse_ini_file(__DIR__.'/../configuration/database.ini');
     
-
     $dbh = new \Simplon\Mysql\Mysql(
-        'localhost',
-        'root',
-        'P@55w0rd!',
-        'timerboard'
+        'server',
+        'username',
+        'password',
+        'table'
     );
     
     return $dbh;

@@ -25,4 +25,7 @@ require_once __DIR__.'/../functions/sso/printssourl.php';
 require_once __DIR__.'/../functions/sso/redirecttonew.php';
 require_once __DIR__.'/../functions/sso/ssosuccess.php';
 
+//Process Functions
+require_once __DIR__.'/../functions/process/install.php';
+
 ?>

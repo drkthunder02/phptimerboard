@@ -13,11 +13,6 @@ error_reporting(E_ALL);
 function SSOSuccess($char, $corp, $charID) {
     $db = DBOpen();
     
-    var_dump($char);
-    printf("<br>");
-    var_dump($charID);
-    printf("<br>");
-    
     $corpAccess = $db->fetchColumn('SELECT AccessLevel FROM Corporations WHERE CorporationID= :id', array('id' => $char['corporation_id']));
     $corpAccess = $corpAccess * 1;
     $allyAccess = $db->fetchColumn('SELECT AccessLevel FROM Alliances WHERE AllianceID= :id', array('id' => $corp['alliance_id']));
@@ -25,7 +20,6 @@ function SSOSuccess($char, $corp, $charID) {
     
     //Search for the character in the database to see if its the first time loggin in
     $first = $db->fetchRow('SELECT * FROM Characters WHERE CharacterID= :id', array('id' => $charID));
-    var_dump($first);
     printf("<br>");
     //Need to check if corporation or alliance has access
     if($first == false) {
@@ -77,7 +71,6 @@ function SSOSuccess($char, $corp, $charID) {
     //Go to the main site for timers in the timerboard
     $location = 'http://' . $_SERVER['HTTP_HOST'];
     $location = $location . dirname($_SERVER['PHP_SELF']) . '/timer/index.php';
-    var_dump($location);
     header("Location: $location");
 }
 
