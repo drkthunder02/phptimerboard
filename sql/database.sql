@@ -126,8 +126,8 @@ CREATE TABLE IF NOT EXISTS `Logs` (
 -- Table structure for `Install`
 --
 
-CREATE TABLE IF NOT EXISTS `Install` (
-    `Installed` bool,
+CREATE TABLE IF NOT EXISTS `Installation` (
+    `Installed` tinyint(1)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `Install` (`Installed`) VALUES (0);
