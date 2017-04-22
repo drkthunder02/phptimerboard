@@ -37,8 +37,8 @@ $timers = $db->fetchRowMany('SELECT * FROM Timers WHERE EVETime >= :now', array(
 //Print out the table header and the start of the body tag
 printf("<br><br><br>");
 
-printf("<div class=\"container\">");
-printf("<table class=\"table-reponsive\">
+printf("<div class=\"table-responsive\">");
+printf("<table class=\"table\">
             <thead>
                 <tr>
                     <th class=\"col-md-1\">Type</th>
@@ -64,7 +64,7 @@ if($timers != NULL) {
             printf("<tr class=\"warning\">");
         } else if ($timer['Type'] == 'Offensive') {
             printf("<tr class=\"danger\">");
-        } else if ($timer['Type'] == 'Structure') {
+        } else if ($timer['Type'] == 'Fuel') {
             printf("<tr class=\"info\">");
         }
         

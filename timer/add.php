@@ -59,7 +59,7 @@ printf("<div class=\"container\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"EVE_Time\">EVE Time:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"EVE_Time\" id=\"EVE_Time\" placeholder=\"03/10/2017 12:00\">
+                    <input class=\"form-control\" type=\"text\" name=\"EVE_Time\" id=\"EVE_Time\" placeholder=\"" . gmdate("M d Y H:i") . "\">
                 </div>
                 <div class=\"form-group\">
                     <label for=\"Notes\">Notes:</label>
