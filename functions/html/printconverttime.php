@@ -7,11 +7,11 @@
  */
 
 function ConvertTime($time) {
-    $hours = floor($time / 3600);
-    $minutes = floor(($time / 60) % 60);
-    $seconds = $time % 60;
+    $hours = ceil($time / 3600) % 24;
+    $minutes = ceil($time / 60) % 60;
+    $days = ceil($time / 86400);
     
-    $timeString = $hours . ":" . $minutes . ":" . $seconds;
+    $timeString = $days . "D ". $hours . ":" . $minutes;
     
     return $timeString;
 }

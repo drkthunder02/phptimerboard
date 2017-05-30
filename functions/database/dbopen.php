@@ -7,12 +7,21 @@
  */
 
 function DBOpen() {
-    
+    /*
     $dbh = new \Simplon\Mysql\Mysql(
         'server',
         'username',
         'password',
         'table'
+    );
+     * 
+     */
+    
+    $dbh = new \Simplon\Mysql\Mysql(
+        'localhost',
+        'root',
+        'P@55w0rd!',
+        'timerboard'
     );
     
     return $dbh;

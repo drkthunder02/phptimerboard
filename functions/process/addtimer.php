@@ -83,8 +83,7 @@ if(isset($_POST['User'])) {
 }
 
 //Turn the $evetime from a regular date entered into seconds time only
-//echo strtotime("2014-01-01 00:00:01")."<hr>";
-// output is 1388516401
+$time = str_replace('/', '-', $time);
 $time = strtotime($evetime);
 
 $db = DBOpen();
