@@ -48,7 +48,7 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 $result = curl_exec($ch);
 //Check for curl error
 if(!curl_error($ch)) {
-    $data = json_deocde($result, true);
+    $data = json_decode($result, true);
     $allianceId = $data['alliance'][0];
 } else {
     $allianceId = null;
