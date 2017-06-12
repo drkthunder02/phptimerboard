@@ -11,7 +11,7 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 //Get the required files from the function registry
-require_once __DIR__.'/functions/registry.php';
+require_once __DIR__.'/../functions/registry.php';
 
 //Start a session
 $session = new \Custom\Sessions\session();
@@ -25,12 +25,13 @@ if($_SESSION['logged'] != true AND $_SESSION['AccessLevel'] < 3 ) {
 
 PrintHTMLHeaderLogged();
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
-
+printf("<br><br>");
 //Add a corporation for the white list
 printf("<div class=\"container\">
-            <form class=\"form-group\" action=\"/../process/addcorporation.php\" method=\"POST\">
+            <h3>Enter the corporation name to add the ability to login.</h3><br>
+            <form class=\"form-group\" action=\"/../functions/process/addcorporation.php\" method=\"POST\">
                 <div class=\"form-group\">
-                    <label for=\"corporationName\">corporation Name:</label>
+                    <label for=\"corporationName\">Corporation Name:</label>
                     <input class=\"form-control\" type=\"text\" name=\"corporationName\" id=\"corporationName\">
                 </div>
                 <button class=\"btn btn-default\" type=\"submit\">Add Corporation</button>

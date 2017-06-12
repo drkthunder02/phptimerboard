@@ -29,7 +29,7 @@ printf("<br><br>");
 
 //Add an alliance to the white list
 printf("<div class=\"container\">
-            <h3>Enter either the alliance name or alliance id of the alliance to add to the ability to login.</h3><br>
+            <h3>Enter either the alliance name to add the ability to login.</h3><br>
             <form class=\"form-group\" action=\"../functions/process/addalliance.php\" method=\"POST\">
                 <div class=\"form-group\">
                     <label for=\"AllianceName\">Alliance Name:</label>

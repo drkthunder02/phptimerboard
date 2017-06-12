@@ -86,5 +86,7 @@ switch($_GET['part']) {
 
 DBClose($db);
 
+PrintHTMLFooterLogged();
+
 ?>
             

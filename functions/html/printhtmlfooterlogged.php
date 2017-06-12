@@ -7,10 +7,11 @@
  */
 
 function PrintHTMLFooterLogged() {
-    printf("<hr>");
-    printf("<div class=\"container\" align=\"center\">");
+    printf("<footer class=\"footer\"");
+    printf("<div class=\"footer\" align=\"center\">");
     printf("PHP Timerboard written by Lowjack Tzetsu.");
     printf("</div>");
+    printf("</footer>");
 }
 
 ?>

@@ -10,7 +10,7 @@
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-require_once __DIR__.'/../registry.php';
+require_once __DIR__.'/../../functions/registry.php';
 
 $session = new Custom\Sessions\session();
 
