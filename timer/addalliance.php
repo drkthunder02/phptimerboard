@@ -26,8 +26,8 @@ if($_SESSION['logged'] != true AND $_SESSION['AccessLevel'] < 3 ) {
 PrintHTMLHeaderLogged();
 PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 printf("<br><br>");
-//Print the form to add an alliance to the whitelist
-//Add timer form
+
+//Add an alliance to the white list
 printf("<div class=\"container\">
             <h3>Enter either the alliance name or alliance id of the alliance to add to the ability to login.</h3><br>
             <form class=\"form-group\" action=\"../functions/process/addalliance.php\" method=\"POST\">
@@ -35,13 +35,7 @@ printf("<div class=\"container\">
                     <label for=\"AllianceName\">Alliance Name:</label>
                     <input class=\"form-control\" type=\"text\" name=\"AllianceName\" id=\"AllianceName\">
                 </div>
-                <div class=\"form-group\">
-                    <label for=\"AllianceId\">Alliance ID:</label>
-                    <input class=\"form-control\" type=\"text\" name=\"AllianceId\" id=\"AllianceId\">
-                </div>
-                <div class=\"form-group\">
-                    <input class=\"form-control\" type=\"Submit\" value=\"Add Alliance\">
-                </div>
+                <button class=\"btn btn-default\" type=\"submit\">Add Alliance</button>
             </form>
         </div>");
 

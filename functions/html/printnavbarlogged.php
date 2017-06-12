@@ -27,7 +27,6 @@ function PrintNavBarLogged($character, $accessLevel) {
                             <li><a href=\"" . $location . "index.php\">View Timers</a></li>
                             <li><a href=\"" . $location . "add.php\">Add Timer</a></li>
                             <li><a href=\"" . $location . "edit.php\">Edit Timer</a></li>
-                            <li><a href=\"" . $location . "remove.php\">Remove Timer</a></li>
                             <li class=\"dropdown\"><a data-toggle=\"dropdown\" class=\"dropdown-toggle\">Admin<b class=\"caret\"></b></a>
                                 <ul class=\"dropdown-menu\">
                                     <li><a href=\"" . $location . "addalliance.php\">Add Alliance</a></li>
@@ -62,7 +61,6 @@ function PrintNavBarLogged($character, $accessLevel) {
                             <li><a href=\"" . $location . "index.php\">View Timers</a></li>
                             <li><a href=\"" . $location . "add.php\">Add Timer</a></li>
                             <li><a href=\"" . $location . "edit.php\">Edit Timer</a></li>
-                            <li><a href=\"" . $location . "remove.php\">Remove Timer</a></li>
                         </ul>
                     </div>
                     <div class=\"collapse navbar-collapse pull-right\">

@@ -23,9 +23,6 @@ if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
 
 //Client ID and Secret Key for using ESI to find alliance information to be adding
 $config = parse_ini_file('../configuration/config.ini');
-
-$clientid = $config['clientid'];
-$secretkey = $config['secretkey'];
 $useragent = $config['useragent'];
 
 $db = DBOpen();
@@ -37,11 +34,24 @@ if(isset($_POST['AllianceName'])) {
 } else {
     $allianceName = NULL;
 }
-//Get the Alliance ID from the form
-if(isset($_POST['AllianceId'])) {
-    $allianceId = filter_input(INPUT_POST, 'AllianceId', FILTER_SANITIZE_SPECIAL_CHARS);
+
+$url = 'https://esi.tech.ccp.is/latest/search/?categories=alliance&datasource=tranquility&language=en-us&search=' . $allianceName . '&strict=false';
+//Start the curl request
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+curl_setopt($ch, CURLOPT_HTTPGET, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+$result = curl_exec($ch);
+//Check for curl error
+if(!curl_error($ch)) {
+    $data = json_deocde($result, true);
+    $allianceId = $data['alliance'][0];
 } else {
-    $allianceId = NULL;
+    $allianceId = null;
 }
 
 if($allianceId != NULL) {
@@ -73,29 +83,7 @@ if($allianceId != NULL) {
         ));
     }
     
-} else if ($allianceName != NULL) {
-    //Get the alliance name from the database's list from esi
-    $row = $db->fetchRow('SELECT * FROM AllianceNames WHERE Name= :name', array('name' => $allianceName));
-    if($row == false) {
-        PrintHTMLHeaderLogged();
-        PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
-        printf("<br><br><br>");
-        printf("<div class=\"container\">");
-        printf("<p align=\"center\">Unable to find the name in the database.  Please try again but enter the alliance id instead.</p>");
-        printf("</div>");
-        PrintHTMLFooterLogged();
-    }
-    //See if the name is already in the access list
-    $found = $db->fetchRow('SELECT * FROM Alliances WHERE AllianceID= :id', array('id' => $row['AllianceID']));
-    //If the alliance is not found in the access list, then add it otherwise continue
-    if($found == false) {
-        $db->insert('Alliances', array(
-            'AllianceID' => $row['AllianceID'],
-            'Name' => $row['Name'],
-            'AccessLevel' => 1
-        ));
-    }
-}
+} 
 
 DBClose($db);
 

@@ -22,10 +22,7 @@ if($_SESSION['logged'] != true && $_SESSION['AccessLevel'] < 3) {
 }
 
 //Client ID and Secret Key for using ESI to find alliance information to be adding
-$config = parse_ini_file('/../configuration/config.ini');
-
-$clientid = $config['clientid'];
-$secretkey = $config['secretkey'];
+$config = parse_ini_file('../configuration/config.ini');
 $useragent = $config['useragent'];
 
 $db = DBOpen();
@@ -37,11 +34,24 @@ if(isset($_POST['CorporationName'])) {
 } else {
     $corporationName = NULL;
 }
-//Get the Alliance ID from the form
-if(isset($_POST['CorporationId'])) {
-    $corporationId = filter_input(POST, 'CorporationId');
+
+$url = 'https://esi.tech.ccp.is/latest/search/?categories=corporatione&datasource=tranquility&language=en-us&search=' . $corporationName . '&strict=false';
+//Start the curl request
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+curl_setopt($ch, CURLOPT_HTTPGET, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+$result = curl_exec($ch);
+//Check for curl error
+if(!curl_error($ch)) {
+    $data = json_deocde($result, true);
+    $corporationId = $data['corporation'][0];
 } else {
-    $corporationId = NULL;
+    $corporationId = null;
 }
 
 if($corporationId != NULL) {
@@ -73,28 +83,6 @@ if($corporationId != NULL) {
         ));
     }
     
-} else if ($corporationName != NULL) {
-    //Get the corporation name from the database's list from esi
-    $row = $db->fetchRow('SELECT * FROM CorporationNames WHERE Name= :name', array('name' => $corporationName));
-    if($row == false) {
-        PrintHTMLHeaderLogged();
-        PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
-        printf("<br><br><br>");
-        printf("<div class=\"container\">");
-        printf("<p align=\"center\">Unable to find the name in the database.  Please try again but enter the corporation id instead.</p>");
-        printf("</div>");
-        PrintHTMLFooterLogged();
-    }
-    //See if the name is already in the access list
-    $found = $db->fetchRow('SELECT * FROM Corporations WHERE CorporationID= :id', array('id' => $row['CorporationID']));
-    //If the corporation is not found in the access list, then add it otherwise continue
-    if($found == false) {
-        $db->insert('Corporations', array(
-            'CorporationID' => $row['CorporationID'],
-            'Name' => $row['Name'],
-            'AccessLevel' => 1
-        ));
-    }
 }
 
 DBClose($db);
