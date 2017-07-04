@@ -9,7 +9,7 @@ namespace Simplon\Mysql;
 class Mysql
 {
     /**
-     * @var Mysql
+     * @var \PDO
      */
     protected $dbh;
 
@@ -57,16 +57,434 @@ class Mysql
 
             // ------------------------------
 
-            // create PDO instance
-            $this->setDbh(new \PDO($dns, $user, $password));
+            if (empty($options['pdo']))
+            {
+                $options['pdo'] = [];
+            }
+
+            $this->setDbh(new \PDO($dns, $user, $password, $options['pdo']));
 
             // set fetchMode
             $this->setFetchMode($fetchMode);
         }
         catch (\PDOException $e)
         {
-            throw new MysqlException($e->getMessage(), $e->getCode());
+            $message = str_replace($password, '********', $e->getMessage());
+            throw new MysqlException($message, $e->getCode());
         }
+    }
+
+    /**
+     * @return Mysql
+     */
+    public function close()
+    {
+        $this->dbh = null;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|int
+     */
+    public function getRowCount()
+    {
+        if ($this->hasLastStatement() === false)
+        {
+            return false;
+        }
+
+        return $this->getLastStatement()->rowCount();
+    }
+
+    /**
+     * @param string $query
+     *
+     * @return bool
+     * @throws MysqlException
+     */
+    public function executeSql($query)
+    {
+        $dbh = $this->getDbh();
+
+        $response = $dbh->exec($query);
+
+        if ($response !== false)
+        {
+            return true;
+        }
+
+        $error = [
+            'query'     => $query,
+            'errorInfo' => $this->prepareErrorInfo($dbh->errorInfo()),
+        ];
+
+        $errorInfo = json_encode($error);
+
+        throw new MysqlException($errorInfo);
+    }
+
+    /**
+     * @param string $dbName
+     *
+     * @return bool
+     * @throws MysqlException
+     */
+    public function selectDb($dbName)
+    {
+        return $this->executeSql('use ' . $dbName);
+    }
+
+    /**
+     * @return bool
+     */
+    public function transactionBegin()
+    {
+        return $this->dbh->beginTransaction();
+    }
+
+    /**
+     * @return bool
+     */
+    public function transactionCommit()
+    {
+        return $this->dbh->commit();
+    }
+
+    /**
+     * @return bool
+     */
+    public function transactionRollback()
+    {
+        return $this->dbh->rollBack();
+    }
+
+    /**
+     * @param string $query
+     * @param array $conds
+     *
+     * @return null|string
+     * @throws MysqlException
+     */
+    public function fetchColumn($query, array $conds = [])
+    {
+        $response = $this->prepareSelect($query, $conds)->fetchColumn();
+
+        if ($response === false)
+        {
+            return null;
+        }
+
+        return (string)$response;
+    }
+
+    /**
+     * @param string $query
+     * @param array $conds
+     *
+     * @return array|null
+     * @throws MysqlException
+     */
+    public function fetchColumnMany($query, array $conds = [])
+    {
+        $responsesMany = [];
+        $pdoStatment = $this->prepareSelect($query, $conds);
+
+        while ($response = $pdoStatment->fetchColumn())
+        {
+            $responsesMany[] = $response;
+        }
+
+        if (empty($responsesMany))
+        {
+            return null;
+        }
+
+        return (array)$responsesMany;
+    }
+
+    /**
+     * @param string $query
+     * @param array $conds
+     *
+     * @return MysqlQueryIterator|null
+     * @throws MysqlException
+     */
+    public function fetchColumnManyCursor($query, array $conds = [])
+    {
+        $this->prepareSelect($query, $conds);
+
+        $cursor = new MysqlQueryIterator($this->getLastStatement(), 'fetchColumn');
+
+        if ($cursor === false)
+        {
+            return null;
+        }
+
+        return $cursor;
+    }
+
+    /**
+     * @param string $query
+     * @param array $conds
+     *
+     * @return mixed
+     * @throws MysqlException
+     */
+    public function fetchRow($query, array $conds = [])
+    {
+        $response = $this->prepareSelect($query, $conds)->fetch($this->getFetchMode());
+
+        if ($response === false)
+        {
+            return null;
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param string $query
+     * @param array $conds
+     *
+     * @return array|null
+     * @throws MysqlException
+     */
+    public function fetchRowMany($query, array $conds = [])
+    {
+        $responsesMany = [];
+        $pdoStatment = $this->prepareSelect($query, $conds);
+
+        while ($response = $pdoStatment->fetch($this->getFetchMode()))
+        {
+            $responsesMany[] = $response;
+        }
+
+        if (empty($responsesMany))
+        {
+            return null;
+        }
+
+        return (array)$responsesMany;
+    }
+
+    /**
+     * @param string $query
+     * @param array $conds
+     *
+     * @return MysqlQueryIterator|null
+     * @throws MysqlException
+     */
+    public function fetchRowManyCursor($query, array $conds = [])
+    {
+        $this->prepareSelect($query, $conds);
+
+        $cursor = new MysqlQueryIterator($this->getLastStatement(), 'fetch');
+
+        if ($cursor === false)
+        {
+            return null;
+        }
+
+        return $cursor;
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $data
+     * @param bool $insertIgnore
+     *
+     * @return int|bool
+     * @throws MysqlException
+     */
+    public function insert($tableName, array $data, $insertIgnore = false)
+    {
+        if (isset($data[0]))
+        {
+            throw new MysqlException("Multi-dimensional datasets are not allowed. Use 'Mysql::insertMany()' instead");
+        }
+
+        $response = $this->insertMany($tableName, [$data], $insertIgnore);
+
+        if ($response === false)
+        {
+            return false;
+        }
+
+        return array_pop($response);
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $data
+     * @param bool $insertIgnore
+     *
+     * @return array|bool
+     * @throws MysqlException
+     */
+    public function insertMany($tableName, array $data, $insertIgnore = false)
+    {
+        if (!isset($data[0]))
+        {
+            throw new MysqlException("One-dimensional datasets are not allowed. Use 'Mysql::insert()' instead");
+        }
+
+        $query = 'INSERT' . ($insertIgnore === true ? ' IGNORE ' : null) . ' INTO ' . $tableName . ' (:COLUMN_NAMES) VALUES (:PARAM_NAMES)';
+
+        $placeholder = [
+            'column_names' => [],
+            'param_names'  => [],
+        ];
+
+        foreach ($data[0] as $columnName => $value)
+        {
+            $placeholder['column_names'][] = '`' . $columnName . '`';
+            $placeholder['param_names'][] = ':' . $columnName;
+        }
+
+        $query = str_replace(':COLUMN_NAMES', join(', ', $placeholder['column_names']), $query);
+        $query = str_replace(':PARAM_NAMES', join(', ', $placeholder['param_names']), $query);
+
+        // ----------------------------------
+
+        $response = $this->prepareInsertReplace($query, $data);
+
+        if (empty($response))
+        {
+            return false;
+        }
+
+        return (array)$response;
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $data
+     *
+     * @return array|bool
+     * @throws MysqlException
+     */
+    public function replace($tableName, array $data)
+    {
+        if (isset($data[0]))
+        {
+            throw new MysqlException("Multi-dimensional datasets are not allowed. Use 'Mysql::replaceMany()' instead");
+        }
+
+        return $this->replaceMany($tableName, [$data]);
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $data
+     *
+     * @return array|bool
+     * @throws MysqlException
+     */
+    public function replaceMany($tableName, array $data)
+    {
+        if (!isset($data[0]))
+        {
+            throw new MysqlException("One-dimensional datasets are not allowed. Use 'Mysql::replace()' instead");
+        }
+
+        $query = 'REPLACE INTO ' . $tableName . ' (:COLUMN_NAMES) VALUES (:PARAM_NAMES)';
+
+        $placeholder = [
+            'column_names' => [],
+            'param_names'  => [],
+        ];
+
+        foreach ($data[0] as $columnName => $value)
+        {
+            $placeholder['column_names'][] = '`' . $columnName . '`';
+            $placeholder['param_names'][] = ':' . $columnName;
+        }
+
+        $query = str_replace(':COLUMN_NAMES', join(', ', $placeholder['column_names']), $query);
+        $query = str_replace(':PARAM_NAMES', join(', ', $placeholder['param_names']), $query);
+
+        // ----------------------------------
+
+        $response = $this->prepareInsertReplace($query, $data);
+
+        if (empty($response))
+        {
+            return false;
+        }
+
+        return (array)$response;
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $conds
+     * @param array $data
+     * @param null $condsQuery
+     *
+     * @return bool
+     * @throws MysqlException
+     */
+    public function update($tableName, array $conds, array $data, $condsQuery = null)
+    {
+        if (isset($data[0]))
+        {
+            throw new MysqlException("Multi-dimensional datasets are not allowed.");
+        }
+
+        $query = 'UPDATE ' . $tableName . ' SET :PARAMS WHERE :CONDS';
+
+        $placeholder = [
+            'params' => [],
+            'conds'  => [],
+        ];
+
+        foreach ($data as $columnName => $value)
+        {
+            $placeholder['params'][] = '`' . $columnName . '` = :DATA_' . $columnName;
+
+            // mark data keys in case CONDS and DATA hold the same keys
+            unset($data[$columnName]);
+            $data['DATA_' . $columnName] = $value;
+        }
+
+        $query = str_replace(':PARAMS', join(', ', $placeholder['params']), $query);
+        $query = $this->buildCondsQuery($query, $conds, $condsQuery);
+
+        return $this->prepareUpdate($query, $conds, $data);
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $conds
+     * @param null $condsQuery
+     *
+     * @return bool
+     * @throws MysqlException
+     */
+    public function delete($tableName, array $conds = [], $condsQuery = null)
+    {
+        $query = $this->buildCondsQuery('DELETE FROM ' . $tableName . ' WHERE :CONDS', $conds, $condsQuery);
+        $response = $this->prepareDelete($query, $conds);
+
+        if ($response === true)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $fetchMode
+     *
+     * @return Mysql
+     */
+    protected function setFetchMode($fetchMode)
+    {
+        $this->fetchMode = $fetchMode;
+
+        return $this;
     }
 
     /**
@@ -87,28 +505,6 @@ class Mysql
     protected function getDbh()
     {
         return $this->dbh;
-    }
-
-    /**
-     * @return Mysql
-     */
-    public function close()
-    {
-        $this->dbh = null;
-
-        return $this;
-    }
-
-    /**
-     * @param int $fetchMode
-     *
-     * @return Mysql
-     */
-    protected function setFetchMode($fetchMode)
-    {
-        $this->fetchMode = $fetchMode;
-
-        return $this;
     }
 
     /**
@@ -179,29 +575,32 @@ class Mysql
      */
     protected function getParamType($paramValue)
     {
-        switch ($paramValue)
+        if (is_null($paramValue))
         {
-            case is_int($paramValue):
-                return \PDO::PARAM_INT;
-
-            case is_bool($paramValue):
-                return \PDO::PARAM_INT;
-
-            case is_string($paramValue):
-                return \PDO::PARAM_STR;
-
-            case is_float($paramValue):
-                return \PDO::PARAM_STR;
-
-            case is_double($paramValue):
-                return \PDO::PARAM_STR;
-
-            case is_null($paramValue):
-                return \PDO::PARAM_NULL;
-
-            default:
-                throw new MysqlException("Invalid param type: {$paramValue} with type {gettype($paramValue)}");
+            return \PDO::PARAM_NULL;
         }
+        elseif (is_int($paramValue))
+        {
+            return \PDO::PARAM_INT;
+        }
+        elseif (is_bool($paramValue))
+        {
+            return \PDO::PARAM_INT;
+        }
+        elseif (is_string($paramValue))
+        {
+            return \PDO::PARAM_STR;
+        }
+        elseif (is_float($paramValue))
+        {
+            return \PDO::PARAM_STR;
+        }
+        elseif (is_double($paramValue))
+        {
+            return \PDO::PARAM_STR;
+        }
+
+        throw new MysqlException("Invalid param type: {$paramValue} with type {gettype($paramValue)}");
     }
 
     /**
@@ -209,6 +608,7 @@ class Mysql
      * @param array $params
      *
      * @return \PDOStatement
+     * @throws MysqlException
      */
     protected function setParams(\PDOStatement $pdoStatement, array $params)
     {
@@ -456,367 +856,6 @@ class Mysql
         }
 
         return true;
-    }
-
-    /**
-     * @return bool|int
-     */
-    public function getRowCount()
-    {
-        if ($this->hasLastStatement() === false)
-        {
-            return false;
-        }
-
-        return $this->getLastStatement()->rowCount();
-    }
-
-    /**
-     * @param string $query
-     *
-     * @return bool
-     * @throws MysqlException
-     */
-    public function executeSql($query)
-    {
-        $dbh = $this->getDbh();
-
-        $response = $dbh->exec($query);
-
-        if ($response !== false)
-        {
-            return true;
-        }
-
-        $error = [
-            'query'     => $query,
-            'errorInfo' => $this->prepareErrorInfo($dbh->errorInfo()),
-        ];
-
-        $errorInfo = json_encode($error);
-
-        throw new MysqlException($errorInfo);
-    }
-
-    /**
-     * @param string $dbName
-     *
-     * @return bool
-     * @throws MysqlException
-     */
-    public function selectDb($dbName)
-    {
-        return $this->executeSql('use ' . $dbName);
-    }
-
-    /**
-     * @param string $query
-     * @param array $conds
-     *
-     * @return null|string
-     */
-    public function fetchColumn($query, array $conds = [])
-    {
-        $response = $this->prepareSelect($query, $conds)->fetchColumn();
-
-        if ($response === false)
-        {
-            return null;
-        }
-
-        return (string)$response;
-    }
-
-    /**
-     * @param string $query
-     * @param array $conds
-     *
-     * @return array|null
-     */
-    public function fetchColumnMany($query, array $conds = [])
-    {
-        $responsesMany = [];
-        $pdoStatment = $this->prepareSelect($query, $conds);
-
-        while ($response = $pdoStatment->fetchColumn())
-        {
-            $responsesMany[] = $response;
-        }
-
-        if (empty($responsesMany))
-        {
-            return null;
-        }
-
-        return (array)$responsesMany;
-    }
-
-    /**
-     * @param string $query
-     * @param array $conds
-     *
-     * @return MysqlQueryIterator|null
-     */
-    public function fetchColumnManyCursor($query, array $conds = [])
-    {
-        $this->prepareSelect($query, $conds);
-
-        $cursor = new MysqlQueryIterator($this->getLastStatement(), 'fetchColumn');
-
-        if ($cursor === false)
-        {
-            return null;
-        }
-
-        return $cursor;
-    }
-
-    /**
-     * @param string $query
-     * @param array $conds
-     *
-     * @return array|null
-     */
-    public function fetchRow($query, array $conds = [])
-    {
-        $response = $this->prepareSelect($query, $conds)->fetch($this->getFetchMode());
-
-        if ($response === false)
-        {
-            return null;
-        }
-
-        return (array)$response;
-    }
-
-    /**
-     * @param string $query
-     * @param array $conds
-     *
-     * @return array|null
-     */
-    public function fetchRowMany($query, array $conds = [])
-    {
-        $responsesMany = [];
-        $pdoStatment = $this->prepareSelect($query, $conds);
-
-        while ($response = $pdoStatment->fetch($this->getFetchMode()))
-        {
-            $responsesMany[] = $response;
-        }
-
-        if (empty($responsesMany))
-        {
-            return null;
-        }
-
-        return (array)$responsesMany;
-    }
-
-    /**
-     * @param string $query
-     * @param array $conds
-     *
-     * @return MysqlQueryIterator|null
-     */
-    public function fetchRowManyCursor($query, array $conds = [])
-    {
-        $this->prepareSelect($query, $conds);
-
-        $cursor = new MysqlQueryIterator($this->getLastStatement(), 'fetch');
-
-        if ($cursor === false)
-        {
-            return null;
-        }
-
-        return $cursor;
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $data
-     * @param bool $insertIgnore
-     *
-     * @return int|bool
-     * @throws MysqlException
-     */
-    public function insert($tableName, array $data, $insertIgnore = false)
-    {
-        if (isset($data[0]))
-        {
-            throw new MysqlException("Multi-dimensional datasets are not allowed. Use 'Mysql::insertMany()' instead");
-        }
-
-        $response = $this->insertMany($tableName, [$data], $insertIgnore);
-
-        if ($response === false)
-        {
-            return false;
-        }
-
-        return array_pop($response);
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $data
-     * @param bool $insertIgnore
-     *
-     * @return array|bool
-     * @throws MysqlException
-     */
-    public function insertMany($tableName, array $data, $insertIgnore = false)
-    {
-        if (!isset($data[0]))
-        {
-            throw new MysqlException("One-dimensional datasets are not allowed. Use 'Mysql::insert()' instead");
-        }
-
-        $query = 'INSERT' . ($insertIgnore === true ? ' IGNORE ' : null) . ' INTO ' . $tableName . ' (:COLUMN_NAMES) VALUES (:PARAM_NAMES)';
-
-        $placeholder = [
-            'column_names' => [],
-            'param_names'  => [],
-        ];
-
-        foreach ($data[0] as $columnName => $value)
-        {
-            $placeholder['column_names'][] = '`' . $columnName . '`';
-            $placeholder['param_names'][] = ':' . $columnName;
-        }
-
-        $query = str_replace(':COLUMN_NAMES', join(', ', $placeholder['column_names']), $query);
-        $query = str_replace(':PARAM_NAMES', join(', ', $placeholder['param_names']), $query);
-
-        // ----------------------------------
-
-        $response = $this->prepareInsertReplace($query, $data);
-
-        if (empty($response))
-        {
-            return false;
-        }
-
-        return (array)$response;
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $data
-     *
-     * @return array|bool
-     * @throws MysqlException
-     */
-    public function replace($tableName, array $data)
-    {
-        if (isset($data[0]))
-        {
-            throw new MysqlException("Multi-dimensional datasets are not allowed. Use 'Mysql::replaceMany()' instead");
-        }
-
-        return $this->replaceMany($tableName, [$data]);
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $data
-     *
-     * @return array|bool
-     * @throws MysqlException
-     */
-    public function replaceMany($tableName, array $data)
-    {
-        if (!isset($data[0]))
-        {
-            throw new MysqlException("One-dimensional datasets are not allowed. Use 'Mysql::replace()' instead");
-        }
-
-        $query = 'REPLACE INTO ' . $tableName . ' (:COLUMN_NAMES) VALUES (:PARAM_NAMES)';
-
-        $placeholder = [
-            'column_names' => [],
-            'param_names'  => [],
-        ];
-
-        foreach ($data[0] as $columnName => $value)
-        {
-            $placeholder['column_names'][] = '`' . $columnName . '`';
-            $placeholder['param_names'][] = ':' . $columnName;
-        }
-
-        $query = str_replace(':COLUMN_NAMES', join(', ', $placeholder['column_names']), $query);
-        $query = str_replace(':PARAM_NAMES', join(', ', $placeholder['param_names']), $query);
-
-        // ----------------------------------
-
-        $response = $this->prepareInsertReplace($query, $data);
-
-        if (empty($response))
-        {
-            return false;
-        }
-
-        return (array)$response;
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $conds
-     * @param array $data
-     * @param null $condsQuery
-     *
-     * @return bool
-     * @throws MysqlException
-     */
-    public function update($tableName, array $conds, array $data, $condsQuery = null)
-    {
-        if (isset($data[0]))
-        {
-            throw new MysqlException("Multi-dimensional datasets are not allowed.");
-        }
-
-        $query = 'UPDATE ' . $tableName . ' SET :PARAMS WHERE :CONDS';
-
-        $placeholder = [
-            'params' => [],
-            'conds'  => [],
-        ];
-
-        foreach ($data as $columnName => $value)
-        {
-            $placeholder['params'][] = '`' . $columnName . '` = :DATA_' . $columnName;
-
-            // mark data keys in case CONDS and DATA hold the same keys
-            unset($data[$columnName]);
-            $data['DATA_' . $columnName] = $value;
-        }
-
-        $query = str_replace(':PARAMS', join(', ', $placeholder['params']), $query);
-        $query = $this->buildCondsQuery($query, $conds, $condsQuery);
-
-        return $this->prepareUpdate($query, $conds, $data);
-    }
-
-    /**
-     * @param string $tableName
-     * @param array $conds
-     * @param null $condsQuery
-     *
-     * @return bool
-     * @throws MysqlException
-     */
-    public function delete($tableName, array $conds = [], $condsQuery = null)
-    {
-        $query = $this->buildCondsQuery('DELETE FROM ' . $tableName . ' WHERE :CONDS', $conds, $condsQuery);
-        $response = $this->prepareDelete($query, $conds);
-
-        if ($response === true)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     /**

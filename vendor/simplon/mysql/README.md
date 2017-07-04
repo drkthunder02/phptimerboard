@@ -11,11 +11,15 @@ __Note:__ Version 1.x will break when it comes to CRUD. Changed a lot here. Will
 
 # Simplon/Mysql
 
+!! NOTE: 2.0 is experimental, works only with PHP 7.1+ and works with `QueryBuilder` !!
+
 -------------------------------------------------
 
 1. [__Installing__](#1-installing)  
 2. [__Direct vs. SqlManager__](#2-direct-vs-sqlmanager)  
 3. [__Setup connection__](#3-setup-connection)  
+3.1. General  
+3.2. PDO options  
 4. [__Usage: Direct access__](#4-usage-direct-access)  
 4.1. Query  
 4.2. Insert  
@@ -23,6 +27,7 @@ __Note:__ Version 1.x will break when it comes to CRUD. Changed a lot here. Will
 4.4. Replace  
 4.5. Delete  
 4.6. Execute  
+4.7. Transactions    
 5. [__Usage: SqlManager__](#5-usage-sqlmanager)  
 5.1. Query  
 5.2. Insert  
@@ -90,6 +95,8 @@ $sqlManager->fetchRow($sqlBuilder);
 
 ## 3. Setup connection
 
+### 3.1. General
+
 The library requires a config value object in order to instantiate a connection with MySQL. See how it's done:
 
 ```php
@@ -107,6 +114,7 @@ $config = array(
     'charset'    => 'utf8',
     'port'       => 3306,
     'unixSocket' => null,
+    'pdo'        => [] // driver-specific connection options
 );
 
 // standard setup
@@ -138,6 +146,11 @@ In case that you wanna use the ```SqlManager``` there is one piece missing:
 $sqlManager = new \Simplon\Mysql\Manager\SqlManager($dbConn);
 ```
 
+### 3.2. PDO options
+
+From version 1.4.1 onwards you are now able to set `PDO driver specific options`.
+[Dive into the documenation](http://php.net/manual/en/ref.pdo-mysql.php) to get more insights.
+ 
 -------------------------------------------------
 
 ## 4. Usage: Direct access
@@ -392,6 +405,24 @@ This method is ment for calls which do not require any parameters such as ```TRU
 $result = $dbConn->executeSql('TRUNCATE names');
 
 var_dump($result); // true
+```
+
+-------------------------------------------------
+
+### 4.7. Transaction
+
+You can run `transactions` by using the following methods: 
+
+```php
+$dbConn->transactionBegin();
+
+// some sql e.g. inserts etc.
+
+$dbConn->transactionCommit();
+
+// upps! if we made a mistake we can rollback
+
+$dbConn->transactionRollback();
 ```
 
 -------------------------------------------------

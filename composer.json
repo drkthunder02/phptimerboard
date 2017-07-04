@@ -9,6 +9,6 @@
     ],
     "require": {
         "PHP": ">=7.0",
-        "simplon/mysql": "1.3.4"
+        "simplon/mysql": "1.4.2"
     }
 }
