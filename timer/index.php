@@ -33,7 +33,7 @@ PrintNavBarLogged($_SESSION['Character'], $_SESSION['AccessLevel']);
 $currentTime = time();
 
 //Print out the timers that are going on currently since we have printed out the navigation bar at the to"
-$timers = $db->fetchRowMany('SELECT * FROM Timers WHERE EVETime >= :now', array('now' => $currentTime));
+$timers = $db->fetchRowMany('SELECT * FROM Timers WHERE EVETime >= :now ORDER BY Type DESC, EVETime DESC', array('now' => $currentTime));
 
 //Print out the table header and the start of the body tag
 printf("<br><br><br>");
