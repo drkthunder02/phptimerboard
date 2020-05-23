@@ -1,0 +1,3 @@
+[2019-09-29 07:53:00] eseye.INFO: [http 200, ok] get -> https://esi.evetech.net/latest/route/30000142/30002269/?datasource=tranquility&flag=secure [t/e: 0.10s/100]
+[2019-09-29 08:40:11] eseye.INFO: [http 304, not modified] get -> https://esi.evetech.net/latest/route/30002269/30000142/?datasource=tranquility&flag=secure [t/e: 0.10s/100]
+[2019-09-29 11:19:34] eseye.INFO: [http 304, not modified] get -> https://esi.evetech.net/latest/route/30002269/30000142/?datasource=tranquility&flag=secure [t/e: 0.07s/100]

@@ -1,0 +1,35 @@
+{
+    "name": "eveseat/eseye",
+    "description": "A Standalone PHP ESI (EVE Swagger Interface) Client Library",
+    "type": "library",
+    "require": {
+        "php": ">= 7.1",
+        "guzzlehttp/guzzle": "^6.2",
+        "nesbot/carbon": "^1.21|^2.6",
+        "monolog/monolog": "^1.22",
+        "predis/predis": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "mikey179/vfsStream": "~1",
+        "codeclimate/php-test-reporter": "dev-master"
+    },
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Leon Jacobs",
+            "email": "leonja511@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Seat\\Eseye\\": "src/"
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
+    },
+    "bin": [
+        "bin/tokengenerator"
+   ]
+}
