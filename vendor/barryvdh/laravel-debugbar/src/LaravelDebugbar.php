@@ -351,50 +351,47 @@ class LaravelDebugbar extends DebugBar
             }
 
             try {
-                $db->getEventDispatcher()->listen([
+                $db->getEventDispatcher()->listen(
                     \Illuminate\Database\Events\TransactionBeginning::class,
-                    'connection.*.beganTransaction',
-                ], function ($transaction) use ($queryCollector) {
-
-                    // Laravel 5.2 changed the way some core events worked. We must account for
-                    // the first argument being an "event object", where arguments are passed
-                    // via object properties, instead of individual arguments.
-                    if($transaction instanceof \Illuminate\Database\Events\TransactionBeginning) {
-                        $connection = $transaction->connection;
-                    } else {
-                        $connection = $transaction;
+                    function ($transaction) use ($queryCollector) {
+                        $queryCollector->collectTransactionEvent('Begin Transaction', $transaction->connection);
                     }
+                );
 
-                    $queryCollector->collectTransactionEvent('Begin Transaction', $connection);
-                });
-
-                $db->getEventDispatcher()->listen([
+                $db->getEventDispatcher()->listen(
                     \Illuminate\Database\Events\TransactionCommitted::class,
-                    'connection.*.committed',
-                ], function ($transaction) use ($queryCollector) {
-
-                    if($transaction instanceof \Illuminate\Database\Events\TransactionCommitted) {
-                        $connection = $transaction->connection;
-                    } else {
-                        $connection = $transaction;
+                    function ($transaction) use ($queryCollector) {
+                        $queryCollector->collectTransactionEvent('Commit Transaction', $transaction->connection);
                     }
+                );
 
-                    $queryCollector->collectTransactionEvent('Commit Transaction', $connection);
-                });
-
-                $db->getEventDispatcher()->listen([
+                $db->getEventDispatcher()->listen(
                     \Illuminate\Database\Events\TransactionRolledBack::class,
-                    'connection.*.rollingBack',
-                ], function ($transaction) use ($queryCollector) {
-
-                    if($transaction instanceof \Illuminate\Database\Events\TransactionRolledBack) {
-                        $connection = $transaction->connection;
-                    } else {
-                        $connection = $transaction;
+                    function ($transaction) use ($queryCollector) {
+                        $queryCollector->collectTransactionEvent('Rollback Transaction', $transaction->connection);
                     }
+                );
 
-                    $queryCollector->collectTransactionEvent('Rollback Transaction', $connection);
-                });
+                $db->getEventDispatcher()->listen(
+                    'connection.*.beganTransaction',
+                    function ($event, $params) use ($queryCollector) {
+                        $queryCollector->collectTransactionEvent('Begin Transaction', $params[0]);
+                    }
+                );
+
+                $db->getEventDispatcher()->listen(
+                    'connection.*.committed',
+                    function ($event, $params) use ($queryCollector) {
+                        $queryCollector->collectTransactionEvent('Commit Transaction', $params[0]);
+                    }
+                );
+
+                $db->getEventDispatcher()->listen(
+                    'connection.*.rollingBack',
+                    function ($event, $params) use ($queryCollector) {
+                        $queryCollector->collectTransactionEvent('Rollback Transaction', $params[0]);
+                    }
+                );
             } catch (\Exception $e) {
                 $this->addThrowable(
                     new Exception(
@@ -498,6 +495,7 @@ class LaravelDebugbar extends DebugBar
 
         $renderer = $this->getJavascriptRenderer();
         $renderer->setIncludeVendors($this->app['config']->get('debugbar.include_vendors', true));
+        $renderer->setBindAjaxHandlerToFetch($app['config']->get('debugbar.capture_ajax', true));
         $renderer->setBindAjaxHandlerToXHR($app['config']->get('debugbar.capture_ajax', true));
 
         $this->booted = true;
@@ -782,7 +780,7 @@ class LaravelDebugbar extends DebugBar
      */
     protected function isDebugbarRequest()
     {
-        return $this->app['request']->segment(1) == '_debugbar';
+        return $this->app['request']->segment(1) == $this->app['config']->get('debugbar.route_prefix');
     }
 
     /**
@@ -791,8 +789,8 @@ class LaravelDebugbar extends DebugBar
      */
     protected function isJsonRequest(Request $request)
     {
-        // If XmlHttpRequest, return true
-        if ($request->isXmlHttpRequest()) {
+        // If XmlHttpRequest or Live, return true
+        if ($request->isXmlHttpRequest() || $request->headers->get('X-Livewire')) {
             return true;
         }
 

@@ -143,6 +143,16 @@ class Lexer
             return true;
         }
 
+        if (PHP_VERSION_ID >= 80000) {
+            // PHP 8 converts the "bad character" case into a parse error, rather than treating
+            // it as a lexing warning. To preserve previous behavior, we need to assume that an
+            // error occurred.
+            // TODO: We should handle this the same way as PHP 8: Only generate T_BAD_CHARACTER
+            // token here (for older PHP versions) and leave generationg of the actual parse error
+            // to the parser. This will also save the full token scan on PHP 8 here.
+            return true;
+        }
+
         return null !== error_get_last();
     }
 
@@ -290,17 +300,23 @@ class Lexer
                 $this->line += substr_count($value, "\n");
                 $this->filePos += \strlen($value);
             } else {
+                $origLine = $this->line;
+                $origFilePos = $this->filePos;
+                $this->line += substr_count($token[1], "\n");
+                $this->filePos += \strlen($token[1]);
+
                 if (\T_COMMENT === $token[0] || \T_DOC_COMMENT === $token[0]) {
                     if ($this->attributeCommentsUsed) {
                         $comment = \T_DOC_COMMENT === $token[0]
-                            ? new Comment\Doc($token[1], $this->line, $this->filePos, $this->pos)
-                            : new Comment($token[1], $this->line, $this->filePos, $this->pos);
+                            ? new Comment\Doc($token[1],
+                                $origLine, $origFilePos, $this->pos,
+                                $this->line, $this->filePos - 1, $this->pos)
+                            : new Comment($token[1],
+                                $origLine, $origFilePos, $this->pos,
+                                $this->line, $this->filePos - 1, $this->pos);
                         $startAttributes['comments'][] = $comment;
                     }
                 }
-
-                $this->line += substr_count($token[1], "\n");
-                $this->filePos += \strlen($token[1]);
                 continue;
             }
 
