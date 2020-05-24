@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function __construct() {
+        $this->middleware('role:Admin');
+    }
+
+    public function displayDashboard() {
+
+    }
+
     public function displayAddAlliance() {
 
     }
@@ -27,6 +35,14 @@ class AdminController extends Controller
     }
 
     public function displayRemoveCharacter() {
+        
+    }
+
+    public function displayModifyPermissions() {
+
+    }
+
+    public function modifyPermissions() {
         
     }
 }
