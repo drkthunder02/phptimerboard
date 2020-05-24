@@ -11,38 +11,22 @@ class AdminController extends Controller
     }
 
     public function displayDashboard() {
-
+        return view('dashboard.admin.dashboard');
     }
 
-    public function displayAddAlliance() {
-
+    public function displayAddEntity() {
+        return view('dashboard.admin.addentity');
     }
 
-    public function displayAddCorporation() {
-
+    public function displayRemoveEntity() {
+        return view('dashboard.admin.removeentity');
     }
 
-    public function displayAddCharacter() {
-
+    public function displayAddPermission() {
+        return view('dashboard.admin.addpermission');
     }
 
-    public function displayRemoveAlliance() {
-
-    }
-
-    public function displayRemoveCorporation() {
-
-    }
-
-    public function displayRemoveCharacter() {
-        
-    }
-
-    public function displayModifyPermissions() {
-
-    }
-
-    public function modifyPermissions() {
-        
+    public function displayRemovePermission() {
+        return view('dashboard.admin.removepermission');
     }
 }
