@@ -35,7 +35,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/timer/modify', 'Timers\TimerController@displayModifyTimer');
     Route::post('/timer/modify', 'Timers\TimerController@storeModifyTimer');
     Route::get('/timer/display', 'Timers\TimerController@displayTimers');
-
 });
 
 
