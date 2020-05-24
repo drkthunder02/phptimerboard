@@ -23,24 +23,72 @@ class TimerController extends Controller
         return view('timer.addtimer');
     }
 
-    public function storeAddTimer() {
+    public function storeAddTimer(Request $request) {
+        $this->validate($request, [
+            'region' => 'required',
+            'system' => 'required',
+            'planet' => 'required',
+            'moon' => 'required',
+            'type' => 'required',
+            'stage' => 'required',
+            'owner' => 'required',
+            'notes' => 'required',
+            'eve_time' => 'required',
+        ]);
 
+        Timer::insertOrIgnore([
+            'region' => $request->region,
+            'system' => $request->system,
+            'planet' => $request->planet,
+            'moon' => $request->moon,
+            'type' => $request->type,
+            'stage' => $request->stage,
+            'owner' => $request->owner,
+            'eve_time' => $request->eve_time,
+            'notes' => $request->notes,
+            'user_id' => auth()->user()->getId(),
+            'user_name' => auth()->user()->getName(),
+        ]);
+
+        return redirect('/timer/displaytimer')->with('success', 'Timer has been added.');
     }
 
     public function displayRemoveTimer () {
         return view('timer.deletetimer');
     }
 
-    public function storeRemoveTimer() {
+    public function storeRemoveTimer(Request $request) {
+        $this->validate($request, [
+            'region' => 'required',
+            'system' => 'required',
+            'planet' => 'required',
+            'moon' => 'required',
+            'type' => 'required',
+            'stage' => 'required',
+            'owner' => 'required',
+            'notes' => 'required',
+        ]);
 
+        Timer::where([
+            'region' => $request->region,
+            'system' => $request->system,
+            'planet' => $request->planet,
+            'moon' => $request->moon,
+            'type' => $request->type,
+            'stage' => $request->stage,
+            'owner' => $request->owner,
+            'notes' => $request->notes,
+        ])->delete();
+
+        return redirect('/timer/displaytimer')->with('success', 'Timer has been removed.');
     }
 
     public function displayModifyTimer() {
         return view('timer.modifytimer');
     }
 
-    public function storeModifyTimer() {
-        $this->validate([
+    public function storeModifyTimer(Request $request) {
+        $this->validate($request, [
             'region' => 'required',
             'system' => 'required',
             'planet' => 'required',
