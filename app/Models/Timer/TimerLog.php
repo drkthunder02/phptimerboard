@@ -4,7 +4,7 @@ namespace App\Models\Timer\Log;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Log extends Model
+class TimerLog extends Model
 {
     //Table Name
     protected $table = 'logs';
