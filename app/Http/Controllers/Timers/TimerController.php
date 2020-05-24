@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Timers;
 //Internal Library
 use Illuminate\Http\Request;
 use Log;
+use Auth;
 use Carbon\Carbon;
-
-//Library
 
 //Models
 use App\Models\Timer\TimerLog;
