@@ -1,3 +1,4 @@
+@extends('layouts.b4')
 @section('content')
 
 <table class="table table-bordered table-striped">
