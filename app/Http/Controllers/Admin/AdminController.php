@@ -18,15 +18,31 @@ class AdminController extends Controller
         return view('dashboard.admin.addentity');
     }
 
+    public function storeAddEntity() {
+
+    }
+
     public function displayRemoveEntity() {
         return view('dashboard.admin.removeentity');
+    }
+
+    public function storeRemoveEntity() {
+
     }
 
     public function displayAddPermission() {
         return view('dashboard.admin.addpermission');
     }
 
+    public function storeAddPermissions() {
+
+    }
+
     public function displayRemovePermission() {
         return view('dashboard.admin.removepermission');
+    }
+
+    public function storeRemovePermission() {
+        
     }
 }

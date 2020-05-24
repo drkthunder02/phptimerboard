@@ -11,32 +11,33 @@
 |
 */
 
-/**
- * Unsecure Display pages
- */
-Route::get('/', 'Hauling\HaulingController@displayForm')->name('/');
-Route::post('/', 'Hauling\HaulingController@displayFormResults');
-Route::get('/display/quotes', 'Hauling\HaulingController@displayQuotes')->name('quotes');
-
 Route::group(['middleware' => ['auth']], function(){
     /**
-     * Dashboard Controller Display pages
+     * Admin Controller display pages
      */
-    Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('/dashboard');
-    //Route::get('/profile', 'Dashboard\DashboardController@profile');
+    Route::get('/admin/dashboard/display', 'Admin\AdminController@displayDashboard');
+    Route::get('/admin/dashboard/add/entity', 'Admin\AdminController@displayAddEntity');
+    Route::post('/admin/dashboard/add/entity', 'Admin\AdminController@storeAddEntity');
+    Route::get('/admin/dashboard/remove/entity', 'Admin\AdminController@displayRemoveEntity');
+    Route::post('/admin/dashboard/remove/entity', 'Admin\AdminController@storeRemoveEntity');
+    Route::get('/admin/dashboard/add/permission', 'Admin\AdminController@displayAddPermission');
+    Route::post('/admin/dashboard/add/permission', 'Admin\AdminController@storeAddPermission');
+    Route::get('/admin/dashboard/remove/permission', 'Admin\AdminController@displayRemovePermission');
+    Route::post('/admin/dashboard/remove/permission', 'Admin\AdminController@storeRemovePermission');
 
     /**
-     * Scopes Controller display pages
+     * Timer Controller display pages
      */
-    Route::get('/scopes/select', 'Auth\EsiScopeController@displayScopes');
-    Route::post('redirectToProvider', 'Auth\EsiScopeController@redirectToProvider');
-    
-});
-/*
-Route::group(['middleware' => ['guest']], function() {
+    Route::get('/timer/add', 'Timers\TimerController@displayAddTimer');
+    Route::post('timer/add', 'Timers\TimerController@storeAddTimer');
+    Route::get('/timer/remove', 'Timers\TimerController@displayRemoveTimer');
+    Route::post('/timer/remove', 'Timers\TimerController@storeRemoveTimer');
+    Route::get('/timer/modify', 'Timers\TimerController@displayModifyTimer');
+    Route::post('/timer/modify', 'Timers\TimerController@storeModifyTimer');
+    Route::get('/timer/display', 'Timers\TimerController@displayTimers');
 
 });
-*/
+
 
 /**
  * Login Display pages
